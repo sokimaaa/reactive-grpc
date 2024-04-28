@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package com.sokima.reactive.grpc.bookstore.proto;
+
+option java_multiple_files = true;
+option java_package = "com.sokima.reactive.grpc.bookstore.proto";
+
+message Checksum {
+  string value = 1;
+}
+
+message ISBN {
+  string value = 2;
+}
+
+message PartialBookMetadata {
+  oneof Metadata {
+    string title = 1;
+    string author = 2;
+  }
+}
+
+message FullBookMetadata {
+  string title = 1;
+  string author = 2;
+  string edition = 3;
+}
+
+message BookField {
+  oneof Field {
+    string description = 1;
+  }
+}

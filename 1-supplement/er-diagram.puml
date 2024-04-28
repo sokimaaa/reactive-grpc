@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/ie-diagram
+
+entity "Book" as b {
+    * PK: book_id
+    * isbn (business key)
+    --
+    is_purchased
+    --
+    * FK: checksum
+}
+
+entity "BookAggregation" as ba {
+    * PK: aggregation_id
+    --
+    quantity
+    --
+    * FK: checksum
+}
+
+entity "BookIdentity" as bi {
+    * PK: checksum
+    --
+    title
+    author
+    edition
+    description
+}
+
+bi ||--o{ b
+bi ||--|| ba
+
+@enduml

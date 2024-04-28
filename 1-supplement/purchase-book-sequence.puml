@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Client as C
+participant "Bookstore Backend" as BSBE
+
+C -> BSBE: PurchaseBookRequest \n1: set oneof PurchaseOption\n\t1: FullBookMetadata
+    loop foreach item in set
+        BSBE -> BSBE: generate checksum based on PurchaseOption
+        BSBE -> BSBE: find next book by checksum
+        BSBE -> BSBE: update book status (isPurchased)
+    end
+BSBE -> BSBE: collect response
+BSBE -> C: PurchaseBookResponse \n1: set of isbn
+@enduml

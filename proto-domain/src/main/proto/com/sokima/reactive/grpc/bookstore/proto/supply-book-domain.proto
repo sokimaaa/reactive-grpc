@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package com.sokima.reactive.grpc.bookstore.proto;
+
+import "com/sokima/reactive/grpc/bookstore/proto/extra-types.proto";
+
+option java_multiple_files = true;
+option java_package = "com.sokima.reactive.grpc.bookstore.proto";
+
+message SupplyBookRequest {
+  string title = 1;
+  string author = 2;
+  string edition = 3;
+  int32 supplyNumber = 4;
+}
+
+message SupplyBookResponse {
+  Checksum checksum = 1;
+  repeated ISBN isbn = 2;
+  int64 quantity = 3;
+}
+
+service SupplyBookUseCase {
+  rpc supplyBooks(stream SupplyBookRequest) returns (stream SupplyBookResponse);
+}

@@ -1,0 +1,13 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Client as C
+participant "Bookstore Backend" as BSBE
+
+C -> BSBE: RegistrationBookRequest \n1: title\n2: author\n3: edition
+BSBE -> BSBE: generate checksum
+BSBE -> BSBE: create BookIdentity with title, author, edition
+BSBE -> BSBE: create BookAggregation with quantity=0
+BSBE -> BSBE: compose response
+BSBE -> C: RegistrationBookResponse \n1: checksum
+@enduml

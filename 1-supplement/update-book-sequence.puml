@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Client as C
+participant "Bookstore Backend" as BSBE
+
+C -> BSBE: UpdateBookRequest \n1: title\n2: author\n3: edition\n4: BookField
+BSBE -> BSBE: extract BookField
+BSBE -> BSBE: generate checksum
+BSBE -> BSBE: identify what need to update based on BookField
+BSBE -> BSBE: update BookIdentity
+BSBE -> BSBE: compose response
+BSBE -> C: UpdateBookResponse \n1: checksum\n2: newBookField\n3: oldBookField
+@enduml

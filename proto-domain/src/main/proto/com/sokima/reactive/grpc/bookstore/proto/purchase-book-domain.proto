@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.sokima.reactive.grpc.bookstore.proto;
+
+import "com/sokima/reactive/grpc/bookstore/proto/extra-types.proto";
+
+option java_multiple_files = true;
+option java_package = "com.sokima.reactive.grpc.bookstore.proto";
+
+message PurchaseBookRequest {
+  oneof PurchaseOption {
+    FullBookMetadata fullBookMetadata = 1;
+  }
+}
+
+message PurchaseBookResponse {
+  repeated ISBN purchasedBooks = 1;
+}
+
+service PurchaseBookUseCase {
+  rpc purchaseBooks(stream PurchaseBookRequest) returns (PurchaseBookResponse);
+}

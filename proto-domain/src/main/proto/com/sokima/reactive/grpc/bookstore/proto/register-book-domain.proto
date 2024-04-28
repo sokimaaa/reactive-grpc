@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.sokima.reactive.grpc.bookstore.proto;
+
+import "com/sokima/reactive/grpc/bookstore/proto/extra-types.proto";
+
+option java_multiple_files = true;
+option java_package = "com.sokima.reactive.grpc.bookstore.proto";
+
+message RegistrationBookRequest {
+  string title = 1;
+  string author = 2;
+  string edition = 3;
+}
+
+message RegistrationBookResponse {
+  Checksum checksum = 1;
+}
+
+service RegistrationBookUseCase {
+  rpc registerBook(RegistrationBookRequest) returns (RegistrationBookResponse);
+}

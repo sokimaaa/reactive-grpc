@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Client as C
+participant "Bookstore Backend" as BSBE
+
+C -> BSBE: SupplyBookRequest\n1: title\n2: author\n3: edition\n4: supply number
+BSBE -> BSBE: generate checksum
+    loop `supply number` times:
+        BSBE -> BSBE: generate isbn
+        BSBE -> BSBE: create Book with isbn and checksum
+    end
+BSBE -> BSBE: update BookAggregation quantity
+BSBE -> BSBE: collect response with isbn
+BSBE -> C: SupplyBookResponse\n1: checksum\n2: set of isbn\n3: quantity
+@enduml

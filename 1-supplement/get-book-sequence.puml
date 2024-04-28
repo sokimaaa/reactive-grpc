@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Client as C
+participant "Bookstore Backend" as BSBE
+
+C -> BSBE: GetBookRequest \n1: oneof SearchBookOption\n\t1: PartialBookMetadata\n\t2: FullBookMetadata\n\t3: Checksum
+BSBE -> BSBE: process oneof SearchBookOption
+BSBE -> BSBE: find BookIdentity based on SearchBookOption
+BSBE -> BSBE: find BookAggregation based on checksum
+BSBE -> BSBE: calculate availability (quantity > 0)
+BSBE -> BSBE: compose response
+BSBE -> C: GetBookResponse \n1: checksum\n2: title\n3: author\n4: edition\n5: description\n6: isAvailable
+@enduml

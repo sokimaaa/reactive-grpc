@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package com.sokima.reactive.grpc.bookstore.proto;
+
+import "com/sokima/reactive/grpc/bookstore/proto/extra-types.proto";
+
+option java_multiple_files = true;
+option java_package = "com.sokima.reactive.grpc.bookstore.proto";
+
+message UpdateBookRequest {
+  string title = 1;
+  string author = 2;
+  string edition = 3;
+  BookField updatedBookField = 4;
+}
+
+message UpdateBookResponse {
+  Checksum checksum = 1;
+  BookField newBookField = 2;
+  BookField oldBookField = 3;
+}
+
+service UpdateBookUseCase {
+  rpc updateBook(UpdateBookRequest) returns (UpdateBookResponse);
+}
