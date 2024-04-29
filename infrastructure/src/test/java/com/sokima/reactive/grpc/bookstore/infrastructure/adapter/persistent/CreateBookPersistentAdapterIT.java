@@ -42,9 +42,6 @@ class CreateBookPersistentAdapterIT {
     @Autowired(required = false)
     CreateBookPersistentAdapter createBookPersistentAdapter;
 
-    @Autowired
-    BookIdentityRepository repository;
-
     @Test
     @Order(1)
     void testAdapterAutowiring() {
