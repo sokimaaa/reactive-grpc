@@ -21,14 +21,13 @@ import java.util.List;
 
 @Configuration
 public class GetBookUseCaseContext {
-
     @Bean
     GetBookFacade getBookFacade(
-            final List<BookOptionProcessor<?>> processors,
-            final ErrorBookOptionProcessor fallbackProcessor,
+            final List<BookOptionProcessor<?>> bookOptionProcessors,
+            final ErrorBookOptionProcessor errorBookOptionProcessor,
             final OneofResolver<GetBookRequest, SearchBookOption<?>> searchOptionOneofResolver
     ) {
-        return new GetBookFacade(processors, fallbackProcessor, searchOptionOneofResolver);
+        return new GetBookFacade(bookOptionProcessors, errorBookOptionProcessor, searchOptionOneofResolver);
     }
 
     @Configuration
@@ -73,10 +72,7 @@ public class GetBookUseCaseContext {
         @Primary
         OneofResolver<GetBookRequest, SearchBookOption<?>> searchOptionOneofResolver(
                 final List<AbstractOneofResolver<GetBookRequest, SearchBookOption<?>>> searchOptionOneofResolvers) {
-            for (int i = 0; i < searchOptionOneofResolvers.size(); i++) {
-                searchOptionOneofResolvers.get(i).setNext(searchOptionOneofResolvers.get(i + 1));
-            }
-            return searchOptionOneofResolvers.get(0);
+            return AbstractOneofResolver.createChain(searchOptionOneofResolvers);
         }
 
         @Bean
@@ -98,12 +94,9 @@ public class GetBookUseCaseContext {
         static class PartialMetadataOneofResolverContext {
             @Bean
             @Primary
-            OneofResolver<PartialBookMetadata, SearchBookOption<String>> searchOptionOneofResolver(
+            OneofResolver<PartialBookMetadata, SearchBookOption<String>> partialMetadataOneofResolver(
                     final List<AbstractOneofResolver<PartialBookMetadata, SearchBookOption<String>>> partialMetadataOneofResolvers) {
-                for (int i = 0; i < partialMetadataOneofResolvers.size(); i++) {
-                    partialMetadataOneofResolvers.get(i).setNext(partialMetadataOneofResolvers.get(i + 1));
-                }
-                return partialMetadataOneofResolvers.get(0);
+                return AbstractOneofResolver.createChain(partialMetadataOneofResolvers);
             }
 
             @Bean

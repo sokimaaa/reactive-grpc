@@ -17,8 +17,8 @@ public class UpdateBookGrpcAdapter extends ReactorUpdateBookUseCaseGrpc.UpdateBo
     }
 
     @Override
-    public Mono<UpdateBookResponse> updateBook(final UpdateBookRequest request) {
-        return updateBookFacade.updateField(request)
+    public Mono<UpdateBookResponse> updateBook(final Mono<UpdateBookRequest> request) {
+        return request.flatMap(updateBookFacade::doUpdate)
                 .map(response -> UpdateBookResponse.newBuilder()
                         .setChecksum(Checksum.newBuilder().setValue(response.checksum()).build())
                         .setNewBookField(bookField(response.newField()))

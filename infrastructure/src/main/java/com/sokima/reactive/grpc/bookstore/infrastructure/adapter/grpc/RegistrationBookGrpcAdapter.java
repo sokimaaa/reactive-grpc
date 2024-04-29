@@ -18,8 +18,8 @@ public class RegistrationBookGrpcAdapter extends ReactorRegistrationBookUseCaseG
     }
 
     @Override
-    public Mono<RegistrationBookResponse> registerBook(final RegistrationBookRequest request) {
-        return registrationBookFacade.doRegistration(request)
+    public Mono<RegistrationBookResponse> registerBook(final Mono<RegistrationBookRequest> request) {
+        return request.flatMap(registrationBookFacade::doRegistration)
                 .map(response -> RegistrationBookResponse.newBuilder()
                         .setChecksum(
                                 Checksum.newBuilder()

@@ -1,11 +1,11 @@
 package com.sokima.reactive.grpc.bookstore.usecase.purchase;
 
+import com.sokima.reactive.grpc.bookstore.domain.oneof.OneofResolver;
 import com.sokima.reactive.grpc.bookstore.proto.PurchaseBookRequest;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.in.PurchaseOption;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.PurchaseBookResponse;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.ErrorPurchaseOptionProcessor;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.PurchaseOptionProcessor;
-import com.sokima.reactive.grpc.bookstore.usecase.purchase.resolver.PurchaseOptionOneofResolver;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -16,11 +16,11 @@ public final class PurchaseBookFacade {
 
     private final ErrorPurchaseOptionProcessor fallbackProcessor;
 
-    private final PurchaseOptionOneofResolver resolver;
+    private final OneofResolver<PurchaseBookRequest, PurchaseOption<?>> resolver;
 
     public PurchaseBookFacade(final List<PurchaseOptionProcessor<?>> processors,
                               final ErrorPurchaseOptionProcessor fallbackProcessor,
-                              final PurchaseOptionOneofResolver resolver) {
+                              final OneofResolver<PurchaseBookRequest, PurchaseOption<?>> resolver) {
         this.processors = processors;
         this.fallbackProcessor = fallbackProcessor;
         this.resolver = resolver;
