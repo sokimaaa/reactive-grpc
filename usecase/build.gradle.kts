@@ -5,10 +5,6 @@ plugins {
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
-tasks.withType<JavaCompile> {
-    options.annotationProcessorPath = configurations["annotationProcessor"]
-}
-
 dependencies {
     implementation(project(":proto-domain"))
     implementation(project(":java-domain"))
