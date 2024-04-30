@@ -1,44 +1,22 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent;
 
 import com.sokima.reactive.grpc.bookstore.domain.Book;
-import com.sokima.reactive.grpc.bookstore.domain.BookIdentity;
 import com.sokima.reactive.grpc.bookstore.domain.ImmutableIsbn;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookIdentityRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookRepository;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.test.PersistentTestContext;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.test.PostgresContainer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.MountableFile;
 import reactor.test.StepVerifier;
 
 @DataR2dbcTest
-@Testcontainers
+@PersistentTestContext
 @Import(UpdateBookPersistentAdapter.class)
-class UpdateBookPersistentAdapterIT {
-
-    @Container
-    static final PostgreSQLContainer<?> postgresqlContainer = new PostgreSQLContainer<>("postgres:14.0")
-            .withDatabaseName("bookstore")
-            .withUsername("postgres")
-            .withPassword("postgres")
-            .withCopyFileToContainer(MountableFile.forClasspathResource("init.sql"), "/docker-entrypoint-initdb.d/init.sql");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.r2dbc.url", () -> String.format("r2dbc:postgresql://%s:%d/%s",
-                postgresqlContainer.getHost(),
-                postgresqlContainer.getFirstMappedPort(),
-                postgresqlContainer.getDatabaseName()));
-        registry.add("spring.r2dbc.username", postgresqlContainer::getUsername);
-        registry.add("spring.r2dbc.password", postgresqlContainer::getPassword);
-    }
+class UpdateBookPersistentAdapterIT implements PostgresContainer {
 
     @Autowired(required = false)
     UpdateBookPersistentAdapter updateBookPersistentAdapter;

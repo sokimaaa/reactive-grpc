@@ -1,46 +1,30 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent;
 
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookAggregationRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookIdentityRepository;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.test.PersistentTestContext;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.test.PostgresContainer;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.MountableFile;
 import reactor.test.StepVerifier;
 
 @DataR2dbcTest
-@Testcontainers
 @Import({FindBookPersistentAdapter.class, CreateBookPersistentAdapter.class})
+@PersistentTestContext
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class CreateBookPersistentAdapterIT {
-
-    @Container
-    static final PostgreSQLContainer<?> postgresqlContainer = new PostgreSQLContainer<>("postgres:14.0")
-            .withDatabaseName("bookstore")
-            .withUsername("postgres")
-            .withPassword("postgres")
-            .withCopyFileToContainer(MountableFile.forClasspathResource("init.sql"), "/docker-entrypoint-initdb.d/init.sql");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.r2dbc.url", () -> String.format("r2dbc:postgresql://%s:%d/%s",
-                postgresqlContainer.getHost(),
-                postgresqlContainer.getFirstMappedPort(),
-                postgresqlContainer.getDatabaseName()));
-        registry.add("spring.r2dbc.username", postgresqlContainer::getUsername);
-        registry.add("spring.r2dbc.password", postgresqlContainer::getPassword);
-    }
-
+class CreateBookPersistentAdapterIT implements PostgresContainer {
     @Autowired(required = false)
     FindBookPersistentAdapter findBookPersistentAdapter;
     @Autowired(required = false)
     CreateBookPersistentAdapter createBookPersistentAdapter;
+    @Autowired
+    BookAggregationRepository bookAggregationRepository;
+
+    @Autowired
+    BookIdentityRepository bookIdentityRepository;
 
     @Test
     @Order(1)
@@ -54,8 +38,9 @@ class CreateBookPersistentAdapterIT {
         final var title = "1984";
         final var author = "George Orwell";
         final var edition = "3rd edition - test";
+        final var checksum = ChecksumGenerator.generateBookChecksum(title, author, edition);
 
-        findBookPersistentAdapter.findBookByMetadata(title, author, edition)
+        bookIdentityRepository.findById(checksum)
                 .log()
                 .as(StepVerifier::create)
                 .verifyComplete();
@@ -70,7 +55,7 @@ class CreateBookPersistentAdapterIT {
                 })
                 .verifyComplete();
 
-        findBookPersistentAdapter.findBookByMetadata(title, author, edition)
+        bookIdentityRepository.findById(checksum)
                 .log()
                 .as(StepVerifier::create)
                 .expectNextCount(1)
@@ -85,7 +70,7 @@ class CreateBookPersistentAdapterIT {
         final var edition = "3rd edition - test";
         final var checksum = ChecksumGenerator.generateBookChecksum(title, author, edition);
 
-        findBookPersistentAdapter.findBookAggregationByChecksum(checksum)
+        bookAggregationRepository.findByChecksum(checksum)
                 .log()
                 .as(StepVerifier::create)
                 .verifyComplete();
@@ -99,7 +84,7 @@ class CreateBookPersistentAdapterIT {
                 })
                 .verifyComplete();
 
-        findBookPersistentAdapter.findBookAggregationByChecksum(checksum)
+        bookAggregationRepository.findByChecksum(checksum)
                 .log()
                 .as(StepVerifier::create)
                 .expectNextCount(1)
@@ -135,6 +120,12 @@ class CreateBookPersistentAdapterIT {
                 .log()
                 .as(StepVerifier::create)
                 .expectNextCount(3L)
+                .verifyComplete();
+
+        bookAggregationRepository.findByChecksum(checksum)
+                .log()
+                .as(StepVerifier::create)
+                .consumeNextWith(bookAggregation -> Assertions.assertEquals(3L, bookAggregation.getQuantity()))
                 .verifyComplete();
     }
 }

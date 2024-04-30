@@ -1,4 +1,4 @@
-package com.sokima.reactive.grpc.bookstore.infrastructure.context;
+package com.sokima.reactive.grpc.bookstore.infrastructure.context.usecase;
 
 import com.sokima.reactive.grpc.bookstore.domain.oneof.AbstractOneofResolver;
 import com.sokima.reactive.grpc.bookstore.domain.oneof.OneofResolver;
