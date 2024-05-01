@@ -1,11 +1,11 @@
 package com.sokima.reactive.grpc.bookstore.usecase.update.processor;
 
-import com.sokima.reactive.grpc.bookstore.usecase.update.in.BookFieldOption;
-import com.sokima.reactive.grpc.bookstore.usecase.update.out.UpdateBookResponse;
+import com.sokima.reactive.grpc.bookstore.usecase.update.in.UpdateOption;
+import com.sokima.reactive.grpc.bookstore.usecase.update.out.UpdateBookFlowResult;
 import reactor.core.publisher.Flux;
 
-public interface UpdateOptionProcessor<F extends BookFieldOption> {
-    Flux<UpdateBookResponse> process(final F bookFieldOption);
+public interface UpdateOptionProcessor<F extends UpdateOption> {
+    Flux<UpdateBookFlowResult> process(final F bookFieldOption);
 
     boolean support(final String field);
 }

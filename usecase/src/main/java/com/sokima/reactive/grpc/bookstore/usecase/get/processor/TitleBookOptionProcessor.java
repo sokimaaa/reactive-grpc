@@ -4,12 +4,13 @@ import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.domain.helper.Baggage;
 import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
-import com.sokima.reactive.grpc.bookstore.usecase.get.in.TitleBookOption;
-import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookResponse;
-import com.sokima.reactive.grpc.bookstore.usecase.get.out.ImmutableGetBookResponse;
+import com.sokima.reactive.grpc.bookstore.usecase.get.in.TitleSearchOption;
+import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
+import com.sokima.reactive.grpc.bookstore.usecase.get.out.ImmutableGetBookFlowResult;
 import reactor.core.publisher.Flux;
 
-public class TitleBookOptionProcessor implements BookOptionProcessor<TitleBookOption> {
+public class TitleBookOptionProcessor implements BookOptionProcessor<TitleSearchOption> {
+    private static final int MIN_AVAILABLE_QUANTITY = 0;
     private final FindBookPort findBookPort;
 
     public TitleBookOptionProcessor(final FindBookPort findBookPort) {
@@ -17,20 +18,20 @@ public class TitleBookOptionProcessor implements BookOptionProcessor<TitleBookOp
     }
 
     @Override
-    public Flux<GetBookResponse> process(final TitleBookOption searchBookOption) {
+    public Flux<GetBookFlowResult> process(final TitleSearchOption searchBookOption) {
         return findBookPort.findBooksByTitle(searchBookOption.option())
                 .flatMap(bookIdentity -> {
                     final var checksum = ChecksumGenerator.generateBookChecksum(bookIdentity);
                     return findBookPort.findBookAggregationByChecksum(checksum)
                             .map(bookAggregation -> Baggage.of(bookIdentity, bookAggregation));
                 })
-                .map(baggage -> ImmutableGetBookResponse.builder()
+                .map(baggage -> ImmutableGetBookFlowResult.builder()
                         .checksum(baggage.value().checksum())
                         .author(baggage.bookIdentity().author())
                         .title(baggage.bookIdentity().title())
                         .edition(baggage.bookIdentity().edition())
                         .description(baggage.bookIdentity().description())
-                        .isAvailable(baggage.value().quantity() > 0)
+                        .isAvailable(baggage.value().quantity() > MIN_AVAILABLE_QUANTITY)
                         .build());
     }
 

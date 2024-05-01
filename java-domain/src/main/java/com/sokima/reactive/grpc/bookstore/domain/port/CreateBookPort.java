@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 public interface CreateBookPort {
 
-    Mono<BookIdentity> createBookIdentity(final String title, final String author, final String edition);
+    Mono<BookIdentity> createBookIdentity(final BookIdentity bookIdentity);
 
     Mono<BookAggregation> createEmptyBookAggregation(final String checksum);
 

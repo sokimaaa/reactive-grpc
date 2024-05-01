@@ -1,12 +1,12 @@
 package com.sokima.reactive.grpc.bookstore.usecase.get.processor;
 
-import com.sokima.reactive.grpc.bookstore.usecase.get.in.SearchBookOption;
-import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookResponse;
+import com.sokima.reactive.grpc.bookstore.usecase.get.in.SearchOption;
+import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
 import reactor.core.publisher.Flux;
 
-public class ErrorBookOptionProcessor implements BookOptionProcessor<SearchBookOption<Object>> {
+public class ErrorBookOptionProcessor<S extends SearchOption<?>> implements BookOptionProcessor<S> {
     @Override
-    public Flux<GetBookResponse> process(SearchBookOption<Object> searchBookOption) {
+    public Flux<GetBookFlowResult> process(final S searchBookOption) {
         throw new UnsupportedOperationException("Fallback processor. Unknown type of search book option: " + searchBookOption.option());
     }
 

@@ -29,6 +29,9 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
+
+    compileOnly("org.immutables:value:2.10.0-rc0")
+    annotationProcessor("org.immutables:value:2.10.0-rc0")
 }
 
 dependencies {

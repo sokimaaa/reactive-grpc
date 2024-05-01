@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
+@Deprecated
 public abstract class AbstractOneofResolver<I, O> implements OneofResolver<I, O> {
 
     private OneofResolver<I, O> next;

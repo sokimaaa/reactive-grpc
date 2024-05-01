@@ -2,24 +2,24 @@ package com.sokima.reactive.grpc.bookstore.usecase.get.processor;
 
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
-import com.sokima.reactive.grpc.bookstore.usecase.get.in.ChecksumBookOption;
-import com.sokima.reactive.grpc.bookstore.usecase.get.in.FullMetadataBookOption;
-import com.sokima.reactive.grpc.bookstore.usecase.get.in.ImmutableChecksumBookOption;
-import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookResponse;
+import com.sokima.reactive.grpc.bookstore.usecase.get.in.ChecksumSearchOption;
+import com.sokima.reactive.grpc.bookstore.usecase.get.in.FullMetadataSearchOption;
+import com.sokima.reactive.grpc.bookstore.usecase.get.in.ImmutableChecksumSearchOption;
+import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
 import reactor.core.publisher.Flux;
 
-public class FullMetadataBookOptionProcessor implements BookOptionProcessor<FullMetadataBookOption> {
-    private final BookOptionProcessor<ChecksumBookOption> delegate;
+public class FullMetadataBookOptionProcessor implements BookOptionProcessor<FullMetadataSearchOption> {
+    private final BookOptionProcessor<ChecksumSearchOption> delegate;
 
-    public FullMetadataBookOptionProcessor(final BookOptionProcessor<ChecksumBookOption> delegate) {
+    public FullMetadataBookOptionProcessor(final BookOptionProcessor<ChecksumSearchOption> delegate) {
         this.delegate = delegate;
     }
 
     @Override
-    public Flux<GetBookResponse> process(final FullMetadataBookOption searchBookOption) {
+    public Flux<GetBookFlowResult> process(final FullMetadataSearchOption searchBookOption) {
         final var option = searchBookOption.option();
         final var checksum = ChecksumGenerator.generateBookChecksum(option.title(), option.author(), option.edition());
-        final var checksumSearchOption = ImmutableChecksumBookOption.builder()
+        final var checksumSearchOption = ImmutableChecksumSearchOption.builder()
                 .option(checksum)
                 .build();
         return delegate.process(checksumSearchOption);

@@ -1,14 +1,14 @@
 package com.sokima.reactive.grpc.bookstore.usecase.update.processor;
 
-import com.sokima.reactive.grpc.bookstore.usecase.update.in.BookFieldOption;
-import com.sokima.reactive.grpc.bookstore.usecase.update.out.UpdateBookResponse;
+import com.sokima.reactive.grpc.bookstore.usecase.update.in.UpdateOption;
+import com.sokima.reactive.grpc.bookstore.usecase.update.out.UpdateBookFlowResult;
 import reactor.core.publisher.Flux;
 
-public class ErrorUpdateOptionProcessor implements UpdateOptionProcessor<BookFieldOption> {
+public class ErrorUpdateOptionProcessor implements UpdateOptionProcessor<UpdateOption> {
 
     @Override
-    public Flux<UpdateBookResponse> process(final BookFieldOption bookFieldOption) {
-        throw new UnsupportedOperationException("Fallback processor. Unknown type of search book option: " + bookFieldOption.checksum());
+    public Flux<UpdateBookFlowResult> process(final UpdateOption updateOption) {
+        throw new UnsupportedOperationException("Fallback processor. Unknown type of search book option: " + updateOption.checksum());
     }
 
     @Override

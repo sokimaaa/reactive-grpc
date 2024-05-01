@@ -5,8 +5,8 @@ import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
 import com.sokima.reactive.grpc.bookstore.domain.port.UpdateBookPort;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.in.FullBookMetadataPurchaseOption;
-import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.ImmutablePurchaseBookResponse;
-import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.PurchaseBookResponse;
+import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.ImmutablePurchaseBookFlowResult;
+import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.PurchaseBookFlowResult;
 import reactor.core.publisher.Flux;
 
 public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProcessor<FullBookMetadataPurchaseOption> {
@@ -20,14 +20,14 @@ public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProces
     }
 
     @Override
-    public Flux<PurchaseBookResponse> process(final FullBookMetadataPurchaseOption purchaseOption) {
+    public Flux<PurchaseBookFlowResult> process(final FullBookMetadataPurchaseOption purchaseOption) {
         final var option = purchaseOption.option();
         final var checksum = ChecksumGenerator.generateBookChecksum(option.title(), option.author(), option.edition());
         return findBookPort.nextBookByChecksum(checksum)
                 .flatMap(book -> updateBookPort.updateBookIsPurchasedField(book.isbn(), Boolean.TRUE)
                 )
                 .filter(UpdateBookPort.Container::isUpdated)
-                .<PurchaseBookResponse>map(containerOfBook -> ImmutablePurchaseBookResponse.builder()
+                .<PurchaseBookFlowResult>map(containerOfBook -> ImmutablePurchaseBookFlowResult.builder()
                         .purchasedIsbn(containerOfBook.newDomainObject().isbn())
                         .build())
                 .flux();

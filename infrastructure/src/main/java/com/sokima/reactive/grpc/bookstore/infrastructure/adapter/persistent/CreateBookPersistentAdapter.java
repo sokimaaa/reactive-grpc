@@ -41,11 +41,8 @@ public class CreateBookPersistentAdapter implements CreateBookPort {
     }
 
     @Override
-    public Mono<BookIdentity> createBookIdentity(
-            final String title,
-            final String author,
-            final String edition) {
-        final var bookIdentityEntity = bookIdentityTransformer.mapToBookIdentityEntity(title, author, edition);
+    public Mono<BookIdentity> createBookIdentity(final BookIdentity bookIdentity) {
+        final var bookIdentityEntity = bookIdentityTransformer.mapToBookIdentityEntity(bookIdentity);
         return Mono.just(bookIdentityEntity)
                 .flatMap(bookIdentityRepository::save)
                 .map(bookIdentityTransformer::mapToPartialBookIdentity);

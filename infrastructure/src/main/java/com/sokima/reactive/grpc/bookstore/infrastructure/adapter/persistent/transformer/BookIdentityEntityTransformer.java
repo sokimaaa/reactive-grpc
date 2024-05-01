@@ -44,16 +44,14 @@ public class BookIdentityEntityTransformer extends BookIdentityMapper {
     }
 
     public BookIdentityEntity mapToBookIdentityEntity(
-            final String title,
-            final String author,
-            final String edition
+            final BookIdentity bookIdentity
     ) {
         final var bookIdentityEntity = new BookIdentityEntity();
         bookIdentityEntity.setIsNew(Boolean.TRUE);
-        bookIdentityEntity.setChecksum(ChecksumGenerator.generateBookChecksum(title, author, edition));
-        bookIdentityEntity.setAuthor(author);
-        bookIdentityEntity.setTitle(title);
-        bookIdentityEntity.setEdition(edition);
+        bookIdentityEntity.setChecksum(ChecksumGenerator.generateBookChecksum(bookIdentity));
+        bookIdentityEntity.setAuthor(bookIdentity.author());
+        bookIdentityEntity.setTitle(bookIdentity.title());
+        bookIdentityEntity.setEdition(bookIdentity.edition());
         return bookIdentityEntity;
     }
 

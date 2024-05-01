@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class TransformerContext {
 
     @Bean
-    CommonTransformer commonMapper() {
+    CommonTransformer commonTransformer() {
         return new CommonTransformer();
     }
 }
