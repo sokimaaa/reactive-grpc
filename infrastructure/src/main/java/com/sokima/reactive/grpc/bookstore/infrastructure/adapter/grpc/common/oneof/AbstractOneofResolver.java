@@ -1,13 +1,11 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.oneof;
 
-import com.google.protobuf.Message;
-
 import java.util.List;
 import java.util.Objects;
 
 import static java.lang.String.format;
 
-public abstract class AbstractOneofResolver<I extends Message, O> implements OneofResolver<I, O> {
+public abstract class AbstractOneofResolver<I, O> implements OneofResolver<I, O> {
 
     private OneofResolver<I, O> next;
 
@@ -15,7 +13,7 @@ public abstract class AbstractOneofResolver<I extends Message, O> implements One
         this.next = next;
     }
 
-    public static <I extends Message, O> OneofResolver<I, O> createChain(final List<AbstractOneofResolver<I, O>> abstractOneofResolverList) {
+    public static <I, O> OneofResolver<I, O> createChain(final List<AbstractOneofResolver<I, O>> abstractOneofResolverList) {
         for (int i = 0; i < abstractOneofResolverList.size() - 1; i++) {
             abstractOneofResolverList.get(i).setNext(abstractOneofResolverList.get(i + 1));
         }
@@ -38,7 +36,7 @@ public abstract class AbstractOneofResolver<I extends Message, O> implements One
         return Objects.nonNull(next) ? next : dummyOneofResolver();
     }
 
-    private static <I extends Message, O> OneofResolver<I, O> dummyOneofResolver() {
+    private static <I, O> OneofResolver<I, O> dummyOneofResolver() {
         return oneof -> {
             throw new UnsupportedOperationException(format("Any resolvers that could process oneof like: %s", oneof));
         };
