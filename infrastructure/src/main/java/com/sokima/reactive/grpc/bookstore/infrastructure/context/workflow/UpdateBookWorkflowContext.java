@@ -14,6 +14,7 @@ import com.sokima.reactive.grpc.bookstore.usecase.update.out.UpdateBookFlowResul
 import com.sokima.reactive.grpc.bookstore.usecase.update.processor.DescriptionUpdateOptionProcessor;
 import com.sokima.reactive.grpc.bookstore.usecase.update.processor.ErrorUpdateOptionProcessor;
 import com.sokima.reactive.grpc.bookstore.usecase.update.processor.UpdateOptionProcessor;
+import com.sokima.reactive.grpc.bookstore.usecase.update.processor.mapper.Container2UpdateFlowResultMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -54,8 +55,13 @@ public class UpdateBookWorkflowContext {
 
     @Bean
     UpdateOptionProcessor<DescriptionUpdateOption> descriptionUpdateOptionProcessor(
-            final UpdateBookPort updateBookPort
+            final UpdateBookPort updateBookPort, final Container2UpdateFlowResultMapper containerMapper
     ) {
-        return new DescriptionUpdateOptionProcessor(updateBookPort);
+        return new DescriptionUpdateOptionProcessor(updateBookPort, containerMapper);
+    }
+
+    @Bean
+    Container2UpdateFlowResultMapper container2UpdateFlowResultMapper() {
+        return new Container2UpdateFlowResultMapper();
     }
 }

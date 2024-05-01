@@ -13,6 +13,7 @@ import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.PurchaseBookFlowR
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.ErrorPurchaseOptionProcessor;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.FullMetadataPurchaseOptionProcessor;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.PurchaseOptionProcessor;
+import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.mapper.Container2PurchaseFlowResultMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -46,8 +47,14 @@ public class PurchaseBookWorkflowContext {
     @Bean
     PurchaseOptionProcessor<FullBookMetadataPurchaseOption> fullMetadataPurchaseOptionProcessor(
             final FindBookPort findBookPort,
-            final UpdateBookPort updateBookPort
+            final UpdateBookPort updateBookPort,
+            final Container2PurchaseFlowResultMapper containerMapper
     ) {
-        return new FullMetadataPurchaseOptionProcessor(findBookPort, updateBookPort);
+        return new FullMetadataPurchaseOptionProcessor(findBookPort, updateBookPort, containerMapper);
+    }
+
+    @Bean
+    Container2PurchaseFlowResultMapper container2PurchaseFlowResultMapper() {
+        return new Container2PurchaseFlowResultMapper();
     }
 }

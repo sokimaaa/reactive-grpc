@@ -11,6 +11,8 @@ import com.sokima.reactive.grpc.bookstore.usecase.get.GetBookFlow;
 import com.sokima.reactive.grpc.bookstore.usecase.get.in.*;
 import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
 import com.sokima.reactive.grpc.bookstore.usecase.get.processor.*;
+import com.sokima.reactive.grpc.bookstore.usecase.get.processor.mapper.Baggage2GetFlowResultMapper;
+import com.sokima.reactive.grpc.bookstore.usecase.get.processor.mapper.FullMetadata2ChecksumOptionMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -47,29 +49,40 @@ public class GetBookWorkflowContext {
 
     @Bean
     BookOptionProcessor<AuthorSearchOption> authorBookOptionBookOptionProcessor(
-            final FindBookPort findBookPort
-    ) {
-        return new AuthorBookOptionProcessor(findBookPort);
+            final FindBookPort findBookPort, final Baggage2GetFlowResultMapper baggageMapper
+            ) {
+        return new AuthorBookOptionProcessor(findBookPort, baggageMapper);
     }
 
     @Bean
     BookOptionProcessor<ChecksumSearchOption> checksumBookOptionBookOptionProcessor(
-            final FindBookPort findBookPort
+            final FindBookPort findBookPort, final Baggage2GetFlowResultMapper baggageMapper
     ) {
-        return new ChecksumBookOptionProcessor(findBookPort);
+        return new ChecksumBookOptionProcessor(findBookPort, baggageMapper);
     }
 
     @Bean
     BookOptionProcessor<FullMetadataSearchOption> fullMetadataBookOptionBookOptionProcessor(
-            final BookOptionProcessor<ChecksumSearchOption> checksumBookOptionBookOptionProcessor
+            final BookOptionProcessor<ChecksumSearchOption> checksumBookOptionBookOptionProcessor,
+            final FullMetadata2ChecksumOptionMapper fullMetadata2ChecksumOptionMapper
     ) {
-        return new FullMetadataBookOptionProcessor(checksumBookOptionBookOptionProcessor);
+        return new FullMetadataBookOptionProcessor(checksumBookOptionBookOptionProcessor, fullMetadata2ChecksumOptionMapper);
     }
 
     @Bean
     BookOptionProcessor<TitleSearchOption> titleBookOptionProcessor(
-            final FindBookPort findBookPort
+            final FindBookPort findBookPort, final Baggage2GetFlowResultMapper baggageMapper
     ) {
-        return new TitleBookOptionProcessor(findBookPort);
+        return new TitleBookOptionProcessor(findBookPort, baggageMapper);
+    }
+
+    @Bean
+    Baggage2GetFlowResultMapper baggage2GetFlowResultMapper() {
+        return new Baggage2GetFlowResultMapper();
+    }
+
+    @Bean
+    FullMetadata2ChecksumOptionMapper fullMetadata2ChecksumOptionMapper() {
+        return new FullMetadata2ChecksumOptionMapper();
     }
 }

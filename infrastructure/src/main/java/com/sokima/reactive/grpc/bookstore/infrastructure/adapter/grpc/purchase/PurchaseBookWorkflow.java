@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 @Component
-public class PurchaseBookWorkflow implements Workflow<PurchaseBookRequest, PurchaseBookResponse> {
+public final class PurchaseBookWorkflow implements Workflow<PurchaseBookRequest, PurchaseBookResponse> {
 
     private final WorkflowTemplate<PurchaseBookRequest, PurchaseOption<?>, List<PurchaseBookFlowResult>, PurchaseBookResponse> delegate;
 

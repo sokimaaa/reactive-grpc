@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 @Component
-public class GetBookWorkflow implements Workflow<GetBookRequest, GetBookResponse> {
+public final class GetBookWorkflow implements Workflow<GetBookRequest, GetBookResponse> {
 
     private final WorkflowTemplate<GetBookRequest, SearchOption<?>, GetBookFlowResult, GetBookResponse> delegate;
 

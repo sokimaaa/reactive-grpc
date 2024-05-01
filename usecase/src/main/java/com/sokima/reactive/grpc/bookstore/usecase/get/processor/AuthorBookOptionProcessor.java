@@ -6,15 +6,18 @@ import com.sokima.reactive.grpc.bookstore.domain.helper.BookIdentificationOption
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
 import com.sokima.reactive.grpc.bookstore.usecase.get.in.AuthorSearchOption;
 import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
-import com.sokima.reactive.grpc.bookstore.usecase.get.out.ImmutableGetBookFlowResult;
+import com.sokima.reactive.grpc.bookstore.usecase.get.processor.mapper.Baggage2GetFlowResultMapper;
 import reactor.core.publisher.Flux;
 
 public class AuthorBookOptionProcessor implements BookOptionProcessor<AuthorSearchOption> {
-    private static final int MIN_AVAILABLE_QUANTITY = 0;
     private final FindBookPort findBookPort;
+    private final Baggage2GetFlowResultMapper baggageMapper;
 
-    public AuthorBookOptionProcessor(final FindBookPort findBookPort) {
+    public AuthorBookOptionProcessor(final FindBookPort findBookPort,
+                                     final Baggage2GetFlowResultMapper baggageMapper
+    ) {
         this.findBookPort = findBookPort;
+        this.baggageMapper = baggageMapper;
     }
 
     @Override
@@ -25,14 +28,7 @@ public class AuthorBookOptionProcessor implements BookOptionProcessor<AuthorSear
                     return findBookPort.findBookAggregationByChecksum(checksum)
                             .map(bookAggregation -> Baggage.of(bookIdentity, bookAggregation));
                 })
-                .map(baggage -> ImmutableGetBookFlowResult.builder()
-                        .checksum(baggage.value().checksum())
-                        .author(baggage.bookIdentity().author())
-                        .title(baggage.bookIdentity().title())
-                        .edition(baggage.bookIdentity().edition())
-                        .description(baggage.bookIdentity().description())
-                        .isAvailable(baggage.value().quantity() > MIN_AVAILABLE_QUANTITY)
-                        .build());
+                .map(baggageMapper::mapToGetBookFlowResult);
     }
 
     @Override

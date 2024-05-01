@@ -1,49 +1,27 @@
 package com.sokima.reactive.grpc.bookstore.usecase.update.processor;
 
-import com.sokima.reactive.grpc.bookstore.domain.BookIdentity;
-import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.domain.helper.UpdatableField;
 import com.sokima.reactive.grpc.bookstore.domain.port.UpdateBookPort;
-import com.sokima.reactive.grpc.bookstore.usecase.update.in.ImmutableDescriptionUpdateOption;
-import com.sokima.reactive.grpc.bookstore.usecase.update.in.UpdateOption;
 import com.sokima.reactive.grpc.bookstore.usecase.update.in.DescriptionUpdateOption;
-import com.sokima.reactive.grpc.bookstore.usecase.update.out.ImmutableUpdateBookFlowResult;
 import com.sokima.reactive.grpc.bookstore.usecase.update.out.UpdateBookFlowResult;
+import com.sokima.reactive.grpc.bookstore.usecase.update.processor.mapper.Container2UpdateFlowResultMapper;
 import reactor.core.publisher.Flux;
 
 public class DescriptionUpdateOptionProcessor implements UpdateOptionProcessor<DescriptionUpdateOption> {
     private final UpdateBookPort updateBookPort;
+    private final Container2UpdateFlowResultMapper containerMapper;
 
-    public DescriptionUpdateOptionProcessor(final UpdateBookPort updateBookPort) {
+    public DescriptionUpdateOptionProcessor(final UpdateBookPort updateBookPort,
+                                            final Container2UpdateFlowResultMapper containerMapper) {
         this.updateBookPort = updateBookPort;
+        this.containerMapper = containerMapper;
     }
 
     @Override
     public Flux<UpdateBookFlowResult> process(final DescriptionUpdateOption bookFieldOption) {
         return updateBookPort.updateBookIdentityField(bookFieldOption.checksum(), bookFieldOption.field(), bookFieldOption.value())
-                .<UpdateBookFlowResult>map(bookIdentityContainer -> {
-                    final BookIdentity oldBookIdentity = bookIdentityContainer.oldDomainObject();
-                    final BookIdentity newBookIdentity = bookIdentityContainer.newDomainObject();
-                    return ImmutableUpdateBookFlowResult.builder()
-                            .checksum(
-                                    ChecksumGenerator.generateBookChecksum(newBookIdentity)
-                            )
-                            .oldField(
-                                    buildBookFieldOption(oldBookIdentity)
-                            )
-                            .newField(
-                                    buildBookFieldOption(newBookIdentity)
-                            )
-                            .build();
-                })
+                .map(containerMapper::mapToUpdateFlowResult)
                 .flux();
-    }
-
-    private UpdateOption buildBookFieldOption(final BookIdentity bookIdentity) {
-        return ImmutableDescriptionUpdateOption.builder()
-                .checksum(ChecksumGenerator.generateBookChecksum(bookIdentity))
-                .value(bookIdentity.description())
-                .build();
     }
 
     @Override
