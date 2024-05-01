@@ -1,6 +1,6 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.transformer;
 
-import com.sokima.reactive.grpc.bookstore.domain.helper.FieldOption;
+import com.sokima.reactive.grpc.bookstore.domain.helper.UpdatableField;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.transformer.Java2ProtoTransformer;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.transformer.ProtoChecksumTransformer;
 import com.sokima.reactive.grpc.bookstore.proto.BookField;
@@ -29,7 +29,7 @@ public class UpdateFlowResult2ResponseTransformer implements Java2ProtoTransform
 
     private BookField bookField(final UpdateOption option) {
         final var builder = BookField.newBuilder();
-        if (FieldOption.DESCRIPTION.name().equals(option.field())) {
+        if (UpdatableField.DESCRIPTION.name().equals(option.field())) {
             return builder.setDescription(option.value())
                     .build();
         }

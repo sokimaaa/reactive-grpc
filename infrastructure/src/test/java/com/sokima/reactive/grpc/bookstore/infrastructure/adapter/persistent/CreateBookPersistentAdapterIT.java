@@ -1,5 +1,6 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent;
 
+import com.sokima.reactive.grpc.bookstore.domain.ImmutablePartialBookIdentity;
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookAggregationRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookIdentityRepository;
@@ -39,13 +40,18 @@ class CreateBookPersistentAdapterIT implements PostgresContainer {
         final var author = "George Orwell";
         final var edition = "3rd edition - test";
         final var checksum = ChecksumGenerator.generateBookChecksum(title, author, edition);
+        final var bookIdentity = ImmutablePartialBookIdentity.builder()
+                .title(title)
+                .author(author)
+                .edition(edition)
+                .build();
 
         bookIdentityRepository.findById(checksum)
                 .log()
                 .as(StepVerifier::create)
                 .verifyComplete();
 
-        createBookPersistentAdapter.createBookIdentity(title, author, edition)
+        createBookPersistentAdapter.createBookIdentity(bookIdentity)
                 .log()
                 .as(StepVerifier::create)
                 .consumeNextWith(actualBookIdentity -> {

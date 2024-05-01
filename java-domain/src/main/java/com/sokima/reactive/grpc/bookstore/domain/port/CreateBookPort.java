@@ -6,6 +6,10 @@ import com.sokima.reactive.grpc.bookstore.domain.BookIdentity;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Port for interacting with third party component, e.g. database, services and et cetera.
+ * Responsible for creating a new instance of Book, BookIdentity, or BookAggregation.
+ */
 public interface CreateBookPort {
 
     Mono<BookIdentity> createBookIdentity(final BookIdentity bookIdentity);

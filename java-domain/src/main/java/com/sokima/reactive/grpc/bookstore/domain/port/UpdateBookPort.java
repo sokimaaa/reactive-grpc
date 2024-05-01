@@ -5,6 +5,10 @@ import com.sokima.reactive.grpc.bookstore.domain.BookIdentity;
 import com.sokima.reactive.grpc.bookstore.domain.Isbn;
 import reactor.core.publisher.Mono;
 
+/**
+ * Port for interacting with third party component, e.g. database, services and et cetera.
+ * Responsible for updating existing instances of Book, BookIdentity, or BookAggregation.
+ */
 public interface UpdateBookPort {
 
     <V> Mono<Container<BookIdentity>> updateBookIdentityField(final String checksum, final String field, final V value);

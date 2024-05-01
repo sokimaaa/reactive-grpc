@@ -1,5 +1,5 @@
 package com.sokima.reactive.grpc.bookstore.domain.helper;
 
-public enum FieldOption {
+public enum UpdatableField {
     DESCRIPTION
 }

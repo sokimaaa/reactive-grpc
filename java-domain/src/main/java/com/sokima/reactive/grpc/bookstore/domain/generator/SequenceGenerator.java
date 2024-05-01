@@ -2,6 +2,7 @@ package com.sokima.reactive.grpc.bookstore.domain.generator;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicLong;
 
 abstract class SequenceGenerator {
@@ -16,7 +17,7 @@ abstract class SequenceGenerator {
     protected static String generateChecksum(
             final String value
     ) {
-        return DigestUtils.md5Hex(value);
+        return generateChecksum(value.getBytes(StandardCharsets.UTF_8));
     }
 
     protected static String generateChecksum(

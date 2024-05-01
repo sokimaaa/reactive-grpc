@@ -1,7 +1,7 @@
 package com.sokima.reactive.grpc.bookstore.usecase.purchase.processor;
 
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
-import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
+import com.sokima.reactive.grpc.bookstore.domain.helper.BookIdentificationOption;
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
 import com.sokima.reactive.grpc.bookstore.domain.port.UpdateBookPort;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.in.FullBookMetadataPurchaseOption;
@@ -35,6 +35,6 @@ public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProces
 
     @Override
     public boolean support(final String type) {
-        return OneofOptions.FULL_METADATA.name().equals(type);
+        return BookIdentificationOption.FULL_METADATA.name().equals(type);
     }
 }

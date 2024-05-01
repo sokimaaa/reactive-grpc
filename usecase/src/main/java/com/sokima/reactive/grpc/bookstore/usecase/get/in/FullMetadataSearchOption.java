@@ -1,6 +1,6 @@
 package com.sokima.reactive.grpc.bookstore.usecase.get.in;
 
-import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
+import com.sokima.reactive.grpc.bookstore.domain.helper.BookIdentificationOption;
 import com.sokima.reactive.grpc.bookstore.domain.metadata.FullBookMetadata;
 import org.immutables.value.Value;
 
@@ -14,6 +14,6 @@ public interface FullMetadataSearchOption extends SearchOption<FullBookMetadata>
 
     @Value.Default
     default String type() {
-        return OneofOptions.FULL_METADATA.name();
+        return BookIdentificationOption.FULL_METADATA.name();
     }
 }

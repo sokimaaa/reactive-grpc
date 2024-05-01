@@ -2,7 +2,7 @@ package com.sokima.reactive.grpc.bookstore.usecase.update.processor;
 
 import com.sokima.reactive.grpc.bookstore.domain.BookIdentity;
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
-import com.sokima.reactive.grpc.bookstore.domain.helper.FieldOption;
+import com.sokima.reactive.grpc.bookstore.domain.helper.UpdatableField;
 import com.sokima.reactive.grpc.bookstore.domain.port.UpdateBookPort;
 import com.sokima.reactive.grpc.bookstore.usecase.update.in.ImmutableDescriptionUpdateOption;
 import com.sokima.reactive.grpc.bookstore.usecase.update.in.UpdateOption;
@@ -48,6 +48,6 @@ public class DescriptionUpdateOptionProcessor implements UpdateOptionProcessor<D
 
     @Override
     public boolean support(final String field) {
-        return FieldOption.DESCRIPTION.name().equals(field);
+        return UpdatableField.DESCRIPTION.name().equals(field);
     }
 }

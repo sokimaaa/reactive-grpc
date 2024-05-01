@@ -1,6 +1,6 @@
 package com.sokima.reactive.grpc.bookstore.usecase.get.in;
 
-import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
+import com.sokima.reactive.grpc.bookstore.domain.helper.BookIdentificationOption;
 import org.immutables.value.Value;
 
 @Value.Immutable
@@ -12,6 +12,6 @@ public interface AuthorSearchOption extends SearchOption<String> {
 
     @Value.Default
     default String type() {
-        return OneofOptions.AUTHOR.name();
+        return BookIdentificationOption.AUTHOR.name();
     }
 }

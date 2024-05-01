@@ -7,6 +7,10 @@ import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Port for interacting with third party component, e.g. database, services and et cetera.
+ * Responsible for searching the stored instances of Book, BookIdentity, or BookAggregation.
+ */
 public interface FindBookPort {
 
     Mono<BookIdentity> findBookByChecksum(final String checksum);

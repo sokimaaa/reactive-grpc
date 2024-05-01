@@ -1,12 +1,12 @@
 package com.sokima.reactive.grpc.bookstore.usecase.update.in;
 
-import com.sokima.reactive.grpc.bookstore.domain.helper.FieldOption;
+import com.sokima.reactive.grpc.bookstore.domain.helper.UpdatableField;
 import org.immutables.value.Value;
 
 @Value.Immutable
 public interface DescriptionUpdateOption extends UpdateOption {
     @Value.Default
     default String field() {
-        return FieldOption.DESCRIPTION.name();
+        return UpdatableField.DESCRIPTION.name();
     }
 }

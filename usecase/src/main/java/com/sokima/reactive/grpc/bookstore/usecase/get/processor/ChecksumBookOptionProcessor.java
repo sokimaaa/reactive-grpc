@@ -1,6 +1,6 @@
 package com.sokima.reactive.grpc.bookstore.usecase.get.processor;
 
-import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
+import com.sokima.reactive.grpc.bookstore.domain.helper.BookIdentificationOption;
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
 import com.sokima.reactive.grpc.bookstore.usecase.get.in.ChecksumSearchOption;
 import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
@@ -35,6 +35,6 @@ public class ChecksumBookOptionProcessor implements BookOptionProcessor<Checksum
 
     @Override
     public boolean support(final String type) {
-        return OneofOptions.CHECKSUM.name().equals(type);
+        return BookIdentificationOption.CHECKSUM.name().equals(type);
     }
 }

@@ -2,7 +2,7 @@ package com.sokima.reactive.grpc.bookstore.usecase.get.processor;
 
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.domain.helper.Baggage;
-import com.sokima.reactive.grpc.bookstore.domain.helper.OneofOptions;
+import com.sokima.reactive.grpc.bookstore.domain.helper.BookIdentificationOption;
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
 import com.sokima.reactive.grpc.bookstore.usecase.get.in.TitleSearchOption;
 import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
@@ -37,6 +37,6 @@ public class TitleBookOptionProcessor implements BookOptionProcessor<TitleSearch
 
     @Override
     public boolean support(final String type) {
-        return OneofOptions.TITLE.name().equals(type);
+        return BookIdentificationOption.TITLE.name().equals(type);
     }
 }
