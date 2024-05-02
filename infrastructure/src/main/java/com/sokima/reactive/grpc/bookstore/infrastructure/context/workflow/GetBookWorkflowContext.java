@@ -1,9 +1,9 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.context.workflow;
 
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.oneof.AbstractOneofResolver;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.get.search.SearchOptionOneof;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.get.search.partial.PartialMetadataOneof;
-import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.oneof.AbstractOneofResolver;
 import com.sokima.reactive.grpc.bookstore.proto.GetBookRequest;
 import com.sokima.reactive.grpc.bookstore.proto.PartialBookMetadata;
 import com.sokima.reactive.grpc.bookstore.usecase.Flow;
@@ -24,8 +24,8 @@ public class GetBookWorkflowContext {
 
     @Bean
     Flow<SearchOption<?>, GetBookFlowResult> getBookFlow(
-            List<BookOptionProcessor<SearchOption<?>>> processors,
-            ErrorBookOptionProcessor<SearchOption<?>> fallbackProcessor
+            final List<BookOptionProcessor<? extends SearchOption<?>>> processors,
+            final ErrorBookOptionProcessor<SearchOption<?>> fallbackProcessor
     ) {
         return new GetBookFlow(processors, fallbackProcessor);
     }
@@ -50,7 +50,7 @@ public class GetBookWorkflowContext {
     @Bean
     BookOptionProcessor<AuthorSearchOption> authorBookOptionBookOptionProcessor(
             final FindBookPort findBookPort, final Baggage2GetFlowResultMapper baggageMapper
-            ) {
+    ) {
         return new AuthorBookOptionProcessor(findBookPort, baggageMapper);
     }
 

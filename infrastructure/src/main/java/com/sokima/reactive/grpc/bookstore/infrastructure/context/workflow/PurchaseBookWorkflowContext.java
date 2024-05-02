@@ -25,7 +25,7 @@ public class PurchaseBookWorkflowContext {
 
     @Bean
     Flow<PurchaseOption<?>, List<PurchaseBookFlowResult>> purchaseOptionListFlow(
-            final List<PurchaseOptionProcessor<PurchaseOption<?>>> processors,
+            final List<PurchaseOptionProcessor<? extends PurchaseOption<?>>> processors,
             final ErrorPurchaseOptionProcessor<PurchaseOption<?>> fallbackProcessor
     ) {
         return new PurchaseBookFlow(processors, fallbackProcessor);

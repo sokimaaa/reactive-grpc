@@ -24,7 +24,7 @@ public class FullMetadataSearchOptionOneof extends AbstractOneofResolver<GetBook
                         ImmutableFullBookMetadata.builder()
                                 .title(fullBookMetadata.getTitle())
                                 .author(fullBookMetadata.getAuthor())
-                                .title(fullBookMetadata.getEdition())
+                                .edition(fullBookMetadata.getEdition())
                                 .build()
                 )
                 .build();

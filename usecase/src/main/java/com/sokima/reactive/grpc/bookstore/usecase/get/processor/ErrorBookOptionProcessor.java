@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux;
 public class ErrorBookOptionProcessor<S extends SearchOption<?>> implements BookOptionProcessor<S> {
     @Override
     public Flux<GetBookFlowResult> process(final S searchBookOption) {
-        throw new UnsupportedOperationException("Fallback processor. Unknown type of search book option: " + searchBookOption.option());
+        throw new UnsupportedOperationException("Fallback processor. Unknown type of search option: " + searchBookOption.type());
     }
 
     @Override

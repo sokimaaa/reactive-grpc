@@ -10,11 +10,11 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 public final class PurchaseBookFlow implements Flow<PurchaseOption<?>, List<PurchaseBookFlowResult>> {
-    private final List<PurchaseOptionProcessor<PurchaseOption<?>>> processors;
+    private final List<PurchaseOptionProcessor<? extends PurchaseOption<?>>> processors;
     private final ErrorPurchaseOptionProcessor<PurchaseOption<?>> fallbackProcessor;
 
     public PurchaseBookFlow(
-            final List<PurchaseOptionProcessor<PurchaseOption<?>>> processors,
+            final List<PurchaseOptionProcessor<? extends PurchaseOption<?>>> processors,
             final ErrorPurchaseOptionProcessor<PurchaseOption<?>> fallbackProcessor) {
         this.processors = processors;
         this.fallbackProcessor = fallbackProcessor;
@@ -26,7 +26,7 @@ public final class PurchaseBookFlow implements Flow<PurchaseOption<?>, List<Purc
                 .filter(processor -> processor.support(purchaseOption.type()))
                 .findFirst()
                 .orElse(fallbackProcessor)
-                .process(purchaseOption)
+                .safeCastAndProcess(purchaseOption)
                 .transform(Flux::collectList);
     }
 }

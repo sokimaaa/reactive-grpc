@@ -11,11 +11,11 @@ import java.util.List;
 
 public final class UpdateBookFlow implements Flow<UpdateOption, UpdateBookFlowResult> {
 
-    private final List<UpdateOptionProcessor<UpdateOption>> processors;
+    private final List<UpdateOptionProcessor<? extends UpdateOption>> processors;
     private final ErrorUpdateOptionProcessor fallbackProcessor;
 
     public UpdateBookFlow(
-            final List<UpdateOptionProcessor<UpdateOption>> processors,
+            final List<UpdateOptionProcessor<? extends UpdateOption>> processors,
             final ErrorUpdateOptionProcessor fallbackProcessor) {
         this.processors = processors;
         this.fallbackProcessor = fallbackProcessor;
@@ -27,6 +27,6 @@ public final class UpdateBookFlow implements Flow<UpdateOption, UpdateBookFlowRe
                 .filter(processor -> processor.support(option.field()))
                 .findFirst()
                 .orElse(fallbackProcessor)
-                .process(option);
+                .safeCastAndProcess(option);
     }
 }

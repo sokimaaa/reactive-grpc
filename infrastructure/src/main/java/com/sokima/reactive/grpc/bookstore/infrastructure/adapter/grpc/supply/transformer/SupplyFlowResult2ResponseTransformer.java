@@ -70,7 +70,7 @@ public class SupplyFlowResult2ResponseTransformer implements Java2ProtoTransform
 
             @Override
             public Set<Characteristics> characteristics() {
-                return Set.of(Characteristics.IDENTITY_FINISH);
+                return Set.of();
             }
         };
     }

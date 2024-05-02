@@ -8,7 +8,7 @@ public class ErrorUpdateOptionProcessor implements UpdateOptionProcessor<UpdateO
 
     @Override
     public Flux<UpdateBookFlowResult> process(final UpdateOption updateOption) {
-        throw new UnsupportedOperationException("Fallback processor. Unknown type of search book option: " + updateOption.checksum());
+        throw new UnsupportedOperationException("Fallback processor. Unknown type of update option: " + updateOption.field());
     }
 
     @Override

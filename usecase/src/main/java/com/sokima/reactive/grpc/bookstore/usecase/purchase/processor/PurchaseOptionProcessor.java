@@ -8,4 +8,9 @@ public interface PurchaseOptionProcessor<S extends PurchaseOption<?>> {
     Flux<PurchaseBookFlowResult> process(final S purchaseOption);
 
     boolean support(final String type);
+
+    @SuppressWarnings("unchecked")
+    default Flux<PurchaseBookFlowResult> safeCastAndProcess(final PurchaseOption<?> purchaseOption) {
+        return this.process((S) purchaseOption);
+    }
 }

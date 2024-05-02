@@ -7,7 +7,7 @@ import reactor.core.publisher.Flux;
 public class ErrorPurchaseOptionProcessor<P extends PurchaseOption<?>> implements PurchaseOptionProcessor<P> {
     @Override
     public Flux<PurchaseBookFlowResult> process(final P purchaseOption) {
-        throw new UnsupportedOperationException("Fallback processor. Unknown type of search book option: " + purchaseOption.option());
+        throw new UnsupportedOperationException("Fallback processor. Unknown type of purchase option: " + purchaseOption.type());
     }
 
     @Override

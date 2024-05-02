@@ -24,7 +24,7 @@ class FindBookPersistentAdapterIT implements PostgresContainer {
 
     @Test
     void testFindBookByChecksum() {
-        final var checksum = "836838293aa332f46076b36eb87e9754";
+        final var checksum = "7c2496c32d51d874f561c9bf8752467b";
 
         findBookPersistentAdapter.findBookByChecksum(checksum)
                 .log()
@@ -70,7 +70,7 @@ class FindBookPersistentAdapterIT implements PostgresContainer {
 
     @Test
     void testFindBookAggregationByChecksum() {
-        final var checksum = "836838293aa332f46076b36eb87e9754";
+        final var checksum = "7c2496c32d51d874f561c9bf8752467b";
 
         findBookPersistentAdapter.findBookAggregationByChecksum(checksum)
                 .log()
@@ -84,7 +84,7 @@ class FindBookPersistentAdapterIT implements PostgresContainer {
 
     @Test
     void testNextBookByChecksumN() {
-        final var checksum = "836838293aa332f46076b36eb87e9754";
+        final var checksum = "7c2496c32d51d874f561c9bf8752467b";
 
         findBookPersistentAdapter.nextBookByChecksumN(checksum, 3L)
                 .log()

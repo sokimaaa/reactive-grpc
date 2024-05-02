@@ -64,7 +64,7 @@ public class PurchaseFlowResult2ResponseTransformer implements Java2ProtoTransfo
 
             @Override
             public Set<Characteristics> characteristics() {
-                return Set.of(Characteristics.IDENTITY_FINISH);
+                return Set.of();
             }
         };
     }

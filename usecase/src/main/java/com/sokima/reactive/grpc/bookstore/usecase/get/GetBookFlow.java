@@ -10,11 +10,11 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 public final class GetBookFlow implements Flow<SearchOption<?>, GetBookFlowResult> {
-    private final List<BookOptionProcessor<SearchOption<?>>> processors;
+    private final List<BookOptionProcessor<? extends SearchOption<?>>> processors;
     private final ErrorBookOptionProcessor<SearchOption<?>> fallbackProcessor;
 
     public GetBookFlow(
-            final List<BookOptionProcessor<SearchOption<?>>> processors,
+            final List<BookOptionProcessor<? extends SearchOption<?>>> processors,
             final ErrorBookOptionProcessor<SearchOption<?>> fallbackProcessor) {
         this.processors = processors;
         this.fallbackProcessor = fallbackProcessor;
@@ -26,6 +26,6 @@ public final class GetBookFlow implements Flow<SearchOption<?>, GetBookFlowResul
                 .filter(processor -> processor.support(searchOption.type()))
                 .findFirst()
                 .orElse(fallbackProcessor)
-                .process(searchOption);
+                .safeCastAndProcess(searchOption);
     }
 }

@@ -26,7 +26,7 @@ public class UpdateBookWorkflowContext {
 
     @Bean
     Flow<UpdateOption, UpdateBookFlowResult> updateBookFlow(
-            List<UpdateOptionProcessor<UpdateOption>> processors,
+            List<UpdateOptionProcessor<? extends UpdateOption>> processors,
             ErrorUpdateOptionProcessor fallbackProcessor
     ) {
         return new UpdateBookFlow(processors, fallbackProcessor);

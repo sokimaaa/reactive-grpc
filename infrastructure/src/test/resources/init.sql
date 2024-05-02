@@ -36,7 +36,7 @@ VALUES ('c7ad44cbad762a5da0a452f9e8548d17', 'The Great Gatsby', 'F. Scott Fitzge
         'A story of Captain Ahab''s obsession with a giant whale.'),
        ('72c56193fd5aa70c0233951bc62b76b4', 'Pride and Prejudice', 'Jane Austen', '3rd Edition',
         'A romantic novel of manners.'),
-       ('836838293aa332f46076b36eb87e9754', 'To Kill a Mockingbird', 'Harper Lee', '2nd Edition',
+       ('7c2496c32d51d874f561c9bf8752467b', 'To Kill a Mockingbird', 'Harper Lee', '2nd Edition',
         'A novel about the serious issues of rape and racial inequality.');
 
 -- Insert into book
@@ -76,25 +76,25 @@ VALUES ('9780141182636', TRUE,
        ('9781853260002', FALSE,
         '72c56193fd5aa70c0233951bc62b76b4'),
        ('9780061120084', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120085', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120086', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120087', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120088', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120089', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120090', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120091', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120092', FALSE,
-        '836838293aa332f46076b36eb87e9754'),
+        '7c2496c32d51d874f561c9bf8752467b'),
        ('9780061120093', FALSE,
-        '836838293aa332f46076b36eb87e9754');
+        '7c2496c32d51d874f561c9bf8752467b');
 
 -- Insert into book_aggregation
 INSERT INTO book_aggregation (quantity, checksum)
@@ -102,4 +102,4 @@ VALUES (5, 'c7ad44cbad762a5da0a452f9e8548d17'),
        (3, 'a7b866a6a397a40b3e41db2cfc3030dc'),
        (7, 'b2b7c2d5078d709f85f1f957d6269bc9'),
        (2, '72c56193fd5aa70c0233951bc62b76b4'),
-       (10, '836838293aa332f46076b36eb87e9754');
+       (10, '7c2496c32d51d874f561c9bf8752467b');

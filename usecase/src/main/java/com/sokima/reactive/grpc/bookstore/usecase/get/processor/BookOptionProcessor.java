@@ -8,4 +8,9 @@ public interface BookOptionProcessor<S extends SearchOption<?>> {
     Flux<GetBookFlowResult> process(final S searchBookOption);
 
     boolean support(final String type);
+
+    @SuppressWarnings("unchecked")
+    default Flux<GetBookFlowResult> safeCastAndProcess(final SearchOption<?> searchOption) {
+        return this.process((S) searchOption);
+    }
 }
