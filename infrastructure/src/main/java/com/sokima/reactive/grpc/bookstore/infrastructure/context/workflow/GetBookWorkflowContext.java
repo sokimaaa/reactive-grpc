@@ -73,7 +73,7 @@ public class GetBookWorkflowContext {
     BookOptionProcessor<TitleSearchOption> titleBookOptionProcessor(
             final FindBookPort findBookPort, final Baggage2GetFlowResultMapper baggageMapper
     ) {
-        return new TitleBookOptionProcessor(findBookPort, baggageMapper);
+        return new TitleSearchOptionProcessor(findBookPort, baggageMapper);
     }
 
     @Bean

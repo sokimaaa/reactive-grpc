@@ -9,13 +9,13 @@ import com.sokima.reactive.grpc.bookstore.usecase.get.out.GetBookFlowResult;
 import com.sokima.reactive.grpc.bookstore.usecase.get.processor.mapper.Baggage2GetFlowResultMapper;
 import reactor.core.publisher.Flux;
 
-public class TitleBookOptionProcessor implements BookOptionProcessor<TitleSearchOption> {
+public class TitleSearchOptionProcessor implements BookOptionProcessor<TitleSearchOption> {
 
     private final FindBookPort findBookPort;
     private final Baggage2GetFlowResultMapper baggageMapper;
 
-    public TitleBookOptionProcessor(final FindBookPort findBookPort,
-                                    final Baggage2GetFlowResultMapper baggageMapper) {
+    public TitleSearchOptionProcessor(final FindBookPort findBookPort,
+                                      final Baggage2GetFlowResultMapper baggageMapper) {
         this.findBookPort = findBookPort;
         this.baggageMapper = baggageMapper;
     }
@@ -33,6 +33,6 @@ public class TitleBookOptionProcessor implements BookOptionProcessor<TitleSearch
 
     @Override
     public boolean support(final String type) {
-        return BookIdentificationOption.TITLE.name().equals(type);
+        return BookIdentificationOption.TITLE.name().equalsIgnoreCase(type);
     }
 }
