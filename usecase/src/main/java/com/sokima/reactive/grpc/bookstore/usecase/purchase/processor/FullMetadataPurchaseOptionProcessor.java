@@ -7,9 +7,13 @@ import com.sokima.reactive.grpc.bookstore.domain.port.UpdateBookPort;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.in.FullBookMetadataPurchaseOption;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.PurchaseBookFlowResult;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.mapper.Container2PurchaseFlowResultMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
 
 public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProcessor<FullBookMetadataPurchaseOption> {
+
+    private static final Logger log = LoggerFactory.getLogger(FullMetadataPurchaseOptionProcessor.class);
 
     private final FindBookPort findBookPort;
     private final UpdateBookPort updateBookPort;
@@ -24,6 +28,7 @@ public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProces
 
     @Override
     public Flux<PurchaseBookFlowResult> process(final FullBookMetadataPurchaseOption purchaseOption) {
+        log.debug("Processing full metadata purchase option: {}", purchaseOption);
         final var option = purchaseOption.option();
         final var checksum = ChecksumGenerator.generateBookChecksum(option.title(), option.author(), option.edition());
         return findBookPort.nextBookByChecksum(checksum)
@@ -35,6 +40,7 @@ public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProces
 
     @Override
     public boolean support(final String type) {
+        log.trace("Checking is full metadata purchase option: {}", type);
         return BookIdentificationOption.FULL_METADATA.name().equals(type);
     }
 }
