@@ -11,12 +11,16 @@ import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repo
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookAggregationEntityTransformer;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookEntityTransformer;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookIdentityEntityTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
 public class CreateBookPersistentAdapter implements CreateBookPort {
+
+    private static final Logger log = LoggerFactory.getLogger(CreateBookPersistentAdapter.class);
 
     private final BookRepository bookRepository;
     private final BookIdentityRepository bookIdentityRepository;
@@ -44,28 +48,30 @@ public class CreateBookPersistentAdapter implements CreateBookPort {
     public Mono<BookIdentity> createBookIdentity(final BookIdentity bookIdentity) {
         final var bookIdentityEntity = bookIdentityTransformer.mapToBookIdentityEntity(bookIdentity);
         return Mono.just(bookIdentityEntity)
+                .doOnNext(entity -> log.debug("Trying to create book identity based on: {}", entity))
                 .flatMap(bookIdentityRepository::save)
-                .map(bookIdentityTransformer::mapToPartialBookIdentity);
+                .map(bookIdentityTransformer::mapToPartialBookIdentity)
+                .doOnNext(identity -> log.debug("Created book identity: {}", identity));
     }
 
     @Override
-    public Mono<BookAggregation> createEmptyBookAggregation(
-            final String checksum) {
+    public Mono<BookAggregation> createEmptyBookAggregation(final String checksum) {
         final var bookAggregationEntity = bookAggregationTransformer.mapToBookAggregationEntity(checksum);
         return Mono.just(bookAggregationEntity)
+                .doOnNext(entity -> log.debug("Trying to create book aggregation based on: {}", entity))
                 .flatMap(bookAggregationRepository::save)
-                .map(bookAggregationTransformer::mapToBookAggregation);
+                .map(bookAggregationTransformer::mapToBookAggregation)
+                .doOnNext(aggregation -> log.debug("Created book aggregation: {}", aggregation));
     }
 
     @Override
-    public Flux<Book> createBookN(
-            final BookIdentity identity,
-            final Integer count) {
+    public Flux<Book> createBookN(final BookIdentity identity, final Integer count) {
         return bookAggregationRepository.findByChecksum(ChecksumGenerator.generateBookChecksum(identity))
                 .map(entity -> bookAggregationTransformer.enrichQuantity(entity, count))
                 .flatMap(bookAggregationRepository::save)
                 .map(bookAggregation -> bookTransformer.generateBookEntities(bookAggregation, count))
                 .flatMapMany(bookRepository::saveAll)
-                .map(bookEntity -> bookTransformer.mapToBook(bookEntity, identity));
+                .map(bookEntity -> bookTransformer.mapToBook(bookEntity, identity))
+                .doOnNext(book -> log.debug("Created book: {}", book));
     }
 }

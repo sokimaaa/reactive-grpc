@@ -1,4 +1,4 @@
-package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.transformer.field;
+package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.field;
 
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.oneof.OneofResolver;
 import com.sokima.reactive.grpc.bookstore.proto.BookField;

@@ -5,12 +5,16 @@ import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.domain.helper.BookIdentityMapper;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.entity.BookIdentityEntity;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.out.BookWithBookIdentityProjection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
 public class BookIdentityEntityTransformer extends BookIdentityMapper {
+
+    private static final Logger log = LoggerFactory.getLogger(BookIdentityEntityTransformer.class);
 
     private static final String CHECKSUM = "checksum";
     private static final String AUTHOR = "author";
@@ -19,6 +23,7 @@ public class BookIdentityEntityTransformer extends BookIdentityMapper {
     private static final String DESCRIPTION = "description";
 
     public BookIdentity mapToBookIdentity(final BookIdentityEntity entity) {
+        log.trace("Transforming to book identity: {}", entity);
         return bookIdentity(
                 entity.getTitle(),
                 entity.getAuthor(),
@@ -28,6 +33,7 @@ public class BookIdentityEntityTransformer extends BookIdentityMapper {
     }
 
     public BookIdentity mapToPartialBookIdentity(final BookIdentityEntity entity) {
+        log.trace("Transforming to partial book identity: {}", entity);
         return partialBookIdentity(
                 entity.getTitle(),
                 entity.getAuthor(),
@@ -36,6 +42,7 @@ public class BookIdentityEntityTransformer extends BookIdentityMapper {
     }
 
     public BookIdentity mapToPartialBookIdentity(final BookWithBookIdentityProjection projection) {
+        log.trace("Transforming to partial book identity: {}", projection);
         return partialBookIdentity(
                 projection.getTitle(),
                 projection.getAuthor(),
@@ -43,9 +50,8 @@ public class BookIdentityEntityTransformer extends BookIdentityMapper {
         );
     }
 
-    public BookIdentityEntity mapToBookIdentityEntity(
-            final BookIdentity bookIdentity
-    ) {
+    public BookIdentityEntity mapToBookIdentityEntity(final BookIdentity bookIdentity) {
+        log.trace("Transforming to book identity entity: {}", bookIdentity);
         final var bookIdentityEntity = new BookIdentityEntity();
         bookIdentityEntity.setIsNew(Boolean.TRUE);
         bookIdentityEntity.setChecksum(ChecksumGenerator.generateBookChecksum(bookIdentity));
@@ -56,6 +62,7 @@ public class BookIdentityEntityTransformer extends BookIdentityMapper {
     }
 
     public BookIdentityEntity mapRow(final Map<String, Object> row) {
+        log.trace("Transforming to book identity entity: {}", row);
         final var entity = new BookIdentityEntity();
         entity.setChecksum((String) row.get(CHECKSUM));
         entity.setAuthor((String) row.get(AUTHOR));

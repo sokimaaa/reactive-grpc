@@ -24,7 +24,7 @@ import java.util.List;
 public class PurchaseBookWorkflowContext {
 
     @Bean
-    Flow<PurchaseOption<?>, List<PurchaseBookFlowResult>> purchaseOptionListFlow(
+    Flow<PurchaseOption<?>, List<PurchaseBookFlowResult>> purchaseBookFlow(
             final List<PurchaseOptionProcessor<? extends PurchaseOption<?>>> processors,
             final ErrorPurchaseOptionProcessor<PurchaseOption<?>> fallbackProcessor
     ) {

@@ -3,7 +3,7 @@ package com.sokima.reactive.grpc.bookstore.infrastructure.context.workflow;
 import com.sokima.reactive.grpc.bookstore.domain.port.UpdateBookPort;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.oneof.AbstractOneofResolver;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.option.UpdateOptionOneof;
-import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.transformer.field.FieldResponseOneof;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.field.FieldResponseOneof;
 import com.sokima.reactive.grpc.bookstore.proto.BookField;
 import com.sokima.reactive.grpc.bookstore.proto.UpdateBookRequest;
 import com.sokima.reactive.grpc.bookstore.usecase.Flow;

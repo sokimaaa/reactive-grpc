@@ -6,6 +6,8 @@ import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.common.tra
 import com.sokima.reactive.grpc.bookstore.proto.ISBN;
 import com.sokima.reactive.grpc.bookstore.proto.PurchaseBookResponse;
 import com.sokima.reactive.grpc.bookstore.usecase.purchase.out.PurchaseBookFlowResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import java.util.stream.Collector;
 @Component
 public class PurchaseFlowResult2ResponseTransformer implements Java2ProtoTransformer<PurchaseBookResponse, List<PurchaseBookFlowResult>> {
 
+    private static final Logger log = LoggerFactory.getLogger(PurchaseFlowResult2ResponseTransformer.class);
+
     private final ProtoIsbnTransformer isbnTransformer;
 
     public PurchaseFlowResult2ResponseTransformer(final ProtoIsbnTransformer isbnTransformer) {
@@ -28,6 +32,7 @@ public class PurchaseFlowResult2ResponseTransformer implements Java2ProtoTransfo
 
     @Override
     public PurchaseBookResponse transform(final List<PurchaseBookFlowResult> pojo) {
+        log.trace("Transforming to proto purchase book response: {}", pojo);
         return pojo.stream()
                 .map(PurchaseBookFlowResult::purchasedIsbn)
                 .map(Isbn::isbn)

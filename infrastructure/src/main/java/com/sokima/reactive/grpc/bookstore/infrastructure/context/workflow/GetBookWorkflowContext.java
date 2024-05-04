@@ -48,25 +48,25 @@ public class GetBookWorkflowContext {
     }
 
     @Bean
-    BookOptionProcessor<AuthorSearchOption> authorBookOptionBookOptionProcessor(
+    BookOptionProcessor<AuthorSearchOption> authorBookOptionProcessor(
             final FindBookPort findBookPort, final Baggage2GetFlowResultMapper baggageMapper
     ) {
         return new AuthorBookOptionProcessor(findBookPort, baggageMapper);
     }
 
     @Bean
-    BookOptionProcessor<ChecksumSearchOption> checksumBookOptionBookOptionProcessor(
+    BookOptionProcessor<ChecksumSearchOption> checksumBookOptionProcessor(
             final FindBookPort findBookPort, final Baggage2GetFlowResultMapper baggageMapper
     ) {
         return new ChecksumBookOptionProcessor(findBookPort, baggageMapper);
     }
 
     @Bean
-    BookOptionProcessor<FullMetadataSearchOption> fullMetadataBookOptionBookOptionProcessor(
-            final BookOptionProcessor<ChecksumSearchOption> checksumBookOptionBookOptionProcessor,
+    BookOptionProcessor<FullMetadataSearchOption> fullMetadataBookOptionProcessor(
+            final BookOptionProcessor<ChecksumSearchOption> checksumBookOptionProcessor,
             final FullMetadata2ChecksumOptionMapper fullMetadata2ChecksumOptionMapper
     ) {
-        return new FullMetadataBookOptionProcessor(checksumBookOptionBookOptionProcessor, fullMetadata2ChecksumOptionMapper);
+        return new FullMetadataBookOptionProcessor(checksumBookOptionProcessor, fullMetadata2ChecksumOptionMapper);
     }
 
     @Bean

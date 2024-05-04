@@ -2,7 +2,6 @@ package com.sokima.reactive.grpc.bookstore.usecase.get.processor.mapper;
 
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.domain.metadata.ImmutableFullBookMetadata;
-import com.sokima.reactive.grpc.bookstore.usecase.get.in.ChecksumSearchOption;
 import com.sokima.reactive.grpc.bookstore.usecase.get.in.ImmutableFullMetadataSearchOption;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

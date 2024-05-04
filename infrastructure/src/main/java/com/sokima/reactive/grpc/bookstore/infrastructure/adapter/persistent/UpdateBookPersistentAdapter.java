@@ -10,6 +10,8 @@ import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repo
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookEntityTransformer;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookIdentityEntityTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -20,6 +22,7 @@ import static java.lang.String.format;
 @Repository
 public class UpdateBookPersistentAdapter implements UpdateBookPort {
 
+    private static final Logger log = LoggerFactory.getLogger(UpdateBookPersistentAdapter.class);
     private static final String SQL_DYNAMIC_UPDATE_FIELD = "UPDATE book_identity SET %s = :value WHERE checksum = :checksum RETURNING *";
 
     private final BookRepository bookRepository;
@@ -58,7 +61,8 @@ public class UpdateBookPersistentAdapter implements UpdateBookPort {
                         bookIdentityRepository.findById(checksum)
                                 .map(bookIdentityTransformer::mapToBookIdentity)
                                 .map(this::failUpdateContainer)
-                );
+                )
+                .doOnNext(res -> log.debug("Result of updating the book identity field: {}", res));
     }
 
 
@@ -74,7 +78,8 @@ public class UpdateBookPersistentAdapter implements UpdateBookPort {
                                         bookIdentityRepository.findById(container.newDomainObject().getChecksum())
                                 )
                                 .mapNotNull(tuple2BookIdentity -> enrichContainer(container, tuple2BookIdentity))
-                );
+                )
+                .doOnNext(res -> log.debug("Result of updating book is purchased field: {}", res));
     }
 
     private Container<Book> enrichContainer(
