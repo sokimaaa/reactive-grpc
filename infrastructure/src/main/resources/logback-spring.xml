@@ -7,7 +7,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.sokima.reactive.grpc.bookstore" level="DEBUG"/>
+    <logger name="com.sokima.reactive.grpc.bookstore" level="TRACE"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

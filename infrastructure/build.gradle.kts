@@ -9,6 +9,10 @@ application {
     mainClass.set("com.sokima.reactive.grpc.bookstore.infrastructure.Starter")
 }
 
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 

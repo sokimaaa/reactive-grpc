@@ -1,7 +1,6 @@
-FROM gradle:8.4-jdk17
-COPY . .
+FROM openjdk:17
 
-RUN gradle build -xtest
+COPY ./infrastructure/build/libs/*.jar ./app.jar
 
 EXPOSE 9090
-ENTRYPOINT ["gradle", "run"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
