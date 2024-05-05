@@ -1,13 +1,17 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent;
 
 import com.sokima.reactive.grpc.bookstore.domain.Book;
+import com.sokima.reactive.grpc.bookstore.domain.BookAggregation;
 import com.sokima.reactive.grpc.bookstore.domain.BookIdentity;
 import com.sokima.reactive.grpc.bookstore.domain.Isbn;
 import com.sokima.reactive.grpc.bookstore.domain.port.UpdateBookPort;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.entity.BookAggregationEntity;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.entity.BookEntity;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.entity.BookIdentityEntity;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookAggregationRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookIdentityRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookRepository;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookAggregationEntityTransformer;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookEntityTransformer;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.transformer.BookIdentityEntityTransformer;
 import org.slf4j.Logger;
@@ -27,21 +31,27 @@ public class UpdateBookPersistentAdapter implements UpdateBookPort {
 
     private final BookRepository bookRepository;
     private final BookIdentityRepository bookIdentityRepository;
+    private final BookAggregationRepository bookAggregationRepository;
     private final DatabaseClient databaseClient;
     private final BookIdentityEntityTransformer bookIdentityTransformer;
     private final BookEntityTransformer bookTransformer;
+    private final BookAggregationEntityTransformer bookAggregationTransformer;
 
     public UpdateBookPersistentAdapter(
             final BookRepository bookRepository,
             final BookIdentityRepository bookIdentityRepository,
+            final BookAggregationRepository bookAggregationRepository,
             final DatabaseClient databaseClient,
             final BookIdentityEntityTransformer bookIdentityTransformer,
-            final BookEntityTransformer bookTransformer) {
+            final BookEntityTransformer bookTransformer,
+            final BookAggregationEntityTransformer bookAggregationTransformer) {
         this.bookRepository = bookRepository;
         this.bookIdentityRepository = bookIdentityRepository;
+        this.bookAggregationRepository = bookAggregationRepository;
         this.databaseClient = databaseClient;
         this.bookIdentityTransformer = bookIdentityTransformer;
         this.bookTransformer = bookTransformer;
+        this.bookAggregationTransformer = bookAggregationTransformer;
     }
 
     @Override
@@ -67,8 +77,7 @@ public class UpdateBookPersistentAdapter implements UpdateBookPort {
 
 
     @Override
-    public Mono<Container<Book>> updateBookIsPurchasedField(
-            final Isbn isbn, final Boolean isPurchased) {
+    public Mono<Container<Book>> updateBookIsPurchasedField(final Isbn isbn, final Boolean isPurchased) {
         return bookRepository.findByIsbn(isbn.isbn())
                 .map(bookTransformer::copyBookWithPurchased)
                 .flatMap(bookRepository::save)
@@ -80,6 +89,16 @@ public class UpdateBookPersistentAdapter implements UpdateBookPort {
                                 .mapNotNull(tuple2BookIdentity -> enrichContainer(container, tuple2BookIdentity))
                 )
                 .doOnNext(res -> log.debug("Result of updating book is purchased field: {}", res));
+    }
+
+    @Override
+    public Mono<Container<BookAggregation>> updateBookAggregationQuantity(final String checksum, final Long quantity) {
+        return bookAggregationRepository.findByChecksum(checksum)
+                .map(bookAggregation -> bookAggregationTransformer.enrichQuantity(bookAggregation, quantity))
+                .flatMap(bookAggregationRepository::save)
+                .map(entity -> composeContainer(entity, entity))
+                .map(this::recomposeAggregationContainer)
+                .doOnNext(res -> log.debug("Result of updating book aggregation quantity: {}", res));
     }
 
     private Container<Book> enrichContainer(
@@ -96,6 +115,14 @@ public class UpdateBookPersistentAdapter implements UpdateBookPort {
         return new Container<>(
                 bookIdentityTransformer.mapToBookIdentity(container.oldDomainObject()),
                 bookIdentityTransformer.mapToBookIdentity(container.newDomainObject()),
+                container.isUpdated()
+        );
+    }
+
+    private Container<BookAggregation> recomposeAggregationContainer(final Container<BookAggregationEntity> container) {
+        return new Container<>(
+                bookAggregationTransformer.mapToBookAggregation(container.oldDomainObject()),
+                bookAggregationTransformer.mapToBookAggregation(container.newDomainObject()),
                 container.isUpdated()
         );
     }

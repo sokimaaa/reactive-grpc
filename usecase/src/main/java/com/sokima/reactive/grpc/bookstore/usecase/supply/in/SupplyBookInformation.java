@@ -6,5 +6,5 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface SupplyBookInformation {
     PartialBookIdentity partialBookIdentity();
-    Integer supplyNumber();
+    Long supplyNumber();
 }

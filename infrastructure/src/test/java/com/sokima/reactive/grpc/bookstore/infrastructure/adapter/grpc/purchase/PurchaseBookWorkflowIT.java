@@ -1,6 +1,7 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.purchase;
 
 import com.sokima.reactive.grpc.bookstore.domain.Book;
+import com.sokima.reactive.grpc.bookstore.domain.BookAggregation;
 import com.sokima.reactive.grpc.bookstore.domain.Isbn;
 import com.sokima.reactive.grpc.bookstore.domain.generator.ChecksumGenerator;
 import com.sokima.reactive.grpc.bookstore.domain.port.FindBookPort;
@@ -40,6 +41,9 @@ class PurchaseBookWorkflowIT {
     Book bookMock;
 
     @Mock
+    BookAggregation bookAggregationMock;
+
+    @Mock
     Isbn isbnMock;
 
     @Test
@@ -63,6 +67,12 @@ class PurchaseBookWorkflowIT {
                                 .build()
                 )
                 .build();
+
+        Mockito.when(findBookPortMock.findBookAggregationByChecksum(checksum))
+                        .thenReturn(Mono.just(bookAggregationMock));
+
+        Mockito.when(updateBookPortMock.updateBookAggregationQuantity(any(), any()))
+                        .thenReturn(Mono.just(new UpdateBookPort.Container<>(bookAggregationMock, bookAggregationMock, Boolean.TRUE)));
 
         Mockito.when(findBookPortMock.nextBookByChecksum(checksum))
                 .thenReturn(Mono.just(bookMock));

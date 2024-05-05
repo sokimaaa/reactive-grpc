@@ -11,7 +11,7 @@ message SupplyBookRequest {
   string title = 1;
   string author = 2;
   string edition = 3;
-  int32 supplyNumber = 4;
+  int64 supplyNumber = 4;
 }
 
 message SupplyBookResponse {

@@ -65,9 +65,9 @@ public class CreateBookPersistentAdapter implements CreateBookPort {
     }
 
     @Override
-    public Flux<Book> createBookN(final BookIdentity identity, final Integer count) {
+    public Flux<Book> createBookN(final BookIdentity identity, final Long count) {
         return bookAggregationRepository.findByChecksum(ChecksumGenerator.generateBookChecksum(identity))
-                .map(entity -> bookAggregationTransformer.enrichQuantity(entity, count))
+                .map(entity -> bookAggregationTransformer.incrementQuantity(entity, count))
                 .flatMap(bookAggregationRepository::save)
                 .map(bookAggregation -> bookTransformer.generateBookEntities(bookAggregation, count))
                 .flatMapMany(bookRepository::saveAll)

@@ -65,7 +65,7 @@ public class BookEntityTransformer {
         return entity;
     }
 
-    public List<BookEntity> generateBookEntities(final BookAggregationEntity bookAggregation, final Integer count) {
+    public List<BookEntity> generateBookEntities(final BookAggregationEntity bookAggregation, final Long count) {
         log.trace("Transforming to book entities: {} with count: {}", bookAggregation, count);
         return Stream.generate(IsbnGenerator::generateIsbn)
                 .limit(count)

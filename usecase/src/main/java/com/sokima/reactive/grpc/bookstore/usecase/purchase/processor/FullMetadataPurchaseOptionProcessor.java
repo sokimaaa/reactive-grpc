@@ -34,6 +34,12 @@ public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProces
         return findBookPort.nextBookByChecksum(checksum)
                 .flatMap(book -> updateBookPort.updateBookIsPurchasedField(book.isbn(), Boolean.TRUE))
                 .filter(UpdateBookPort.Container::isUpdated)
+                .flatMap(bookContainer -> findBookPort.findBookAggregationByChecksum(checksum)
+                        .flatMap(bookAggregation -> updateBookPort.updateBookAggregationQuantity(
+                                        checksum, bookAggregation.quantity() - 1
+                                )
+                        ).thenReturn(bookContainer)
+                )
                 .map(containerMapper::mapToPurchaseBookFlowResult)
                 .flux();
     }

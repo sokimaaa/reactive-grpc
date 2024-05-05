@@ -16,9 +16,9 @@ public interface CreateBookPort {
 
     Mono<BookAggregation> createEmptyBookAggregation(final String checksum);
 
-    Flux<Book> createBookN(final BookIdentity identity, final Integer count);
+    Flux<Book> createBookN(final BookIdentity identity, final Long count);
 
     default Mono<Book> createBook(final BookIdentity identity) {
-        return createBookN(identity, 1).single();
+        return createBookN(identity, 1L).single();
     }
 }

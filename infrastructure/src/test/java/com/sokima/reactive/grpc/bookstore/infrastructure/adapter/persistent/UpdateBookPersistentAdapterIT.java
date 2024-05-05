@@ -1,7 +1,9 @@
 package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent;
 
 import com.sokima.reactive.grpc.bookstore.domain.Book;
+import com.sokima.reactive.grpc.bookstore.domain.BookAggregation;
 import com.sokima.reactive.grpc.bookstore.domain.ImmutableIsbn;
+import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookAggregationRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookIdentityRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.repository.BookRepository;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.test.PersistentTestContext;
@@ -34,7 +36,7 @@ class UpdateBookPersistentAdapterIT implements PostgresContainer {
 
     @Test
     void testUpdateBookIdentityField() {
-        final var checksum = "c7ad44cbad762a5da0a452f9e8548d17";
+        final var checksum = "7c2496c32d51d874f561c9bf8752467b";
         final var field = "description";
         final var value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.";
 
@@ -69,6 +71,23 @@ class UpdateBookPersistentAdapterIT implements PostgresContainer {
                 .as(StepVerifier::create)
                 .consumeNextWith(actualBookEntity -> {
                     Assertions.assertEquals(value, actualBookEntity.getDescription());
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void testUpdateBookAggregationQuantity() {
+        final var checksum = "7c2496c32d51d874f561c9bf8752467b";
+        final var quantity = 3L;
+
+        updateBookPersistentAdapter.updateBookAggregationQuantity(checksum, quantity)
+                .log()
+                .as(StepVerifier::create)
+                .consumeNextWith(actualBookAggregationContainer -> {
+                    Assertions.assertTrue(actualBookAggregationContainer.isUpdated());
+
+                    final var newBookAggregation = actualBookAggregationContainer.newDomainObject();
+                    Assertions.assertEquals(3L, newBookAggregation.quantity());
                 })
                 .verifyComplete();
     }

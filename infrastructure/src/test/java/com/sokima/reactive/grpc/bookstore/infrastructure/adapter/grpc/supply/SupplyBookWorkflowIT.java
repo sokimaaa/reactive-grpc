@@ -68,7 +68,7 @@ class SupplyBookWorkflowIT {
         Mockito.when(bookIdentityMock.title()).thenReturn(title);
         Mockito.when(bookIdentityMock.edition()).thenReturn(edition);
 
-        Mockito.when(createBookPortMock.createBookN(bookIdentityMock, 3))
+        Mockito.when(createBookPortMock.createBookN(bookIdentityMock, 3L))
                 .thenReturn(Flux.just(bookMock, bookMock, bookMock));
         Mockito.when(bookMock.isbn()).thenReturn(isbnMock);
         Mockito.when(isbnMock.isbn()).thenReturn("1234567");

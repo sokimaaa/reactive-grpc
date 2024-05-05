@@ -108,7 +108,7 @@ class CreateBookPersistentAdapterIT implements PostgresContainer {
         findBookPersistentAdapter.findBookByChecksum(checksum)
                 .log()
                 .flatMapMany(bookIdentity ->
-                        createBookPersistentAdapter.createBookN(bookIdentity, 3))
+                        createBookPersistentAdapter.createBookN(bookIdentity, 3L))
                 .log()
                 .as(StepVerifier::create)
                 .consumeNextWith(actualBook -> {
