@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Import;
 @Import({UpdateBookWorkflowContext.class, GrpcAdapterCommonTestContext.class})
 @ComponentScan({
         "com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.transformer",
-        "com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.option"
+        "com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.option",
+        "com.sokima.reactive.grpc.bookstore.infrastructure.adapter.grpc.update.field"
 })
 public class UpdateBookWorkflowTestContext {
 

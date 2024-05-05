@@ -8,6 +8,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
+import java.nio.file.Path;
+
 import static java.lang.String.format;
 
 @Testcontainers
@@ -18,14 +20,19 @@ public interface PostgresContainer {
 
     @DynamicPropertySource
     static void configureProperties(final DynamicPropertyRegistry registry) {
-        registry.add("spring.r2dbc.username", postgreSqlContainer::getUsername);
-        registry.add("spring.r2dbc.password", postgreSqlContainer::getPassword);
-        registry.add("spring.r2dbc.url", () ->
-                format("r2dbc:postgresql://%s:%d/%s",
-                        postgreSqlContainer.getHost(),
-                        postgreSqlContainer.getFirstMappedPort(),
-                        postgreSqlContainer.getDatabaseName())
-        );
+        registry.add("POSTGRES_HOST", postgreSqlContainer::getHost);
+        registry.add("POSTGRES_PORT", postgreSqlContainer::getFirstMappedPort);
+        registry.add("POSTGRES_USERNAME", postgreSqlContainer::getUsername);
+        registry.add("POSTGRES_PASSWORD", postgreSqlContainer::getPassword);
+
+//        registry.add("spring.r2dbc.username", postgreSqlContainer::getUsername);
+//        registry.add("spring.r2dbc.password", postgreSqlContainer::getPassword);
+//        registry.add("spring.r2dbc.url", () ->
+//                format("r2dbc:postgresql://%s:%d/%s",
+//                        postgreSqlContainer.getHost(),
+//                        postgreSqlContainer.getFirstMappedPort(),
+//                        postgreSqlContainer.getDatabaseName())
+//        );
     }
 
     static PostgreSQLContainer<?> createPostgresContainer() {
@@ -34,7 +41,7 @@ public interface PostgresContainer {
                 .withUsername("postgres")
                 .withPassword("postgres")
                 .withCopyFileToContainer(
-                        MountableFile.forClasspathResource("init.sql"),
+                        MountableFile.forHostPath("../2-database/init.sql"),
                         "/docker-entrypoint-initdb.d/init.sql"
                 );
     }
