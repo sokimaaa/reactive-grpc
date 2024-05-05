@@ -18,14 +18,13 @@ dependencies {
     implementation(project(":usecase"))
 
     implementation("org.springframework.boot:spring-boot-starter")
-
-    implementation(libs.reactor)
-
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE")
 
-    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.postgresql:r2dbc-postgresql")
+
+    implementation(libs.reactor)
 
     compileOnly("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")

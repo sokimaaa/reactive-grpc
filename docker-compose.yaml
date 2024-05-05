@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   postgres:
@@ -6,9 +6,25 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
       POSTGRES_DB: bookstore
     ports:
       - "5432:5432"
     volumes:
       - "./2-database/init.sql:/docker-entrypoint-initdb.d/init.sql"
 
+  bookstore:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      postgres:
+        condition: service_started
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
