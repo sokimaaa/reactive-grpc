@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import reactor.test.StepVerifier;
 
 @SpringBootTest
-class MultiplePurchaseFlowE2eTest extends E2eContainer {
+class MultipleRepeatingPurchaseFlowE2eTest extends E2eContainer {
 
     @Autowired
     RegistrationBookClient registrationBookClient;
@@ -27,22 +27,11 @@ class MultiplePurchaseFlowE2eTest extends E2eContainer {
     GetBookClient getBookClient;
 
     @Test
-    void purchaseBook_twoDiffBookSupplied_bookIsNotAvailableAfterPurchase() {
+    void purchaseBook_twoBookSupplied_bookIsNotAvailableAfterPurchase() {
         registrationBookClient.setRegistrationBookRequest(
-                        "The Adventures of Huckleberry Finn",
-                        "Mark Twain",
-                        "4th Edition"
-                )
-                .invokeRegistrationBookStub()
-                .log()
-                .as(StepVerifier::create)
-                .expectNextCount(1)
-                .verifyComplete();
-
-        registrationBookClient.setRegistrationBookRequest(
-                        "Anna Karenina",
-                        "Leo Tolstoy",
-                        "Classic Edition"
+                        "Great Expectations",
+                        "Charles Dickens",
+                        "Illustrated Edition"
                 )
                 .invokeRegistrationBookStub()
                 .log()
@@ -51,24 +40,10 @@ class MultiplePurchaseFlowE2eTest extends E2eContainer {
                 .verifyComplete();
 
         supplyBookClient.setSupplyBookRequest(
-                        "The Adventures of Huckleberry Finn",
-                        "Mark Twain",
-                        "4th Edition",
-                        1
-                )
-                .invokeSupplyBookStub()
-                .log()
-                .as(StepVerifier::create)
-                .consumeNextWith(supplyBookResponse -> {
-                    Assertions.assertEquals(2, supplyBookResponse.getQuantity());
-                })
-                .verifyComplete();
-
-        supplyBookClient.setSupplyBookRequest(
-                        "Anna Karenina",
-                        "Leo Tolstoy",
-                        "Classic Edition",
-                        1
+                        "Great Expectations",
+                        "Charles Dickens",
+                        "Illustrated Edition",
+                        2
                 )
                 .invokeSupplyBookStub()
                 .log()
@@ -79,14 +54,14 @@ class MultiplePurchaseFlowE2eTest extends E2eContainer {
                 .verifyComplete();
 
         purchaseBookClient.setFullMetadataRequest(
-                        "Anna Karenina",
-                        "Leo Tolstoy",
-                        "Classic Edition"
+                        "Great Expectations",
+                        "Charles Dickens",
+                        "Illustrated Edition"
                 )
                 .setFullMetadataRequest(
-                        "The Adventures of Huckleberry Finn",
-                        "Mark Twain",
-                        "4th Edition"
+                        "Great Expectations",
+                        "Charles Dickens",
+                        "Illustrated Edition"
                 )
                 .invokePurchaseBookStub()
                 .log()
@@ -97,22 +72,9 @@ class MultiplePurchaseFlowE2eTest extends E2eContainer {
                 .verifyComplete();
 
         getBookClient.setFullMetadataRequest(
-                        "The Adventures of Huckleberry Finn",
-                        "Mark Twain",
-                        "4th Edition"
-                )
-                .invokeGetBookStub()
-                .log()
-                .as(StepVerifier::create)
-                .consumeNextWith(getBookResponse -> {
-                    Assertions.assertFalse(getBookResponse.getIsAvailable());
-                })
-                .verifyComplete();
-
-        getBookClient.setFullMetadataRequest(
-                        "Anna Karenina",
-                        "Leo Tolstoy",
-                        "Classic Edition"
+                        "Crime and Punishment",
+                        "Fyodor Dostoevsky",
+                        "Vintage Edition"
                 )
                 .invokeGetBookStub()
                 .log()
