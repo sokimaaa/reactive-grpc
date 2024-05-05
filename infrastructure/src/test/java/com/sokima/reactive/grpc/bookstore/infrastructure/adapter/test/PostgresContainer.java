@@ -24,15 +24,6 @@ public interface PostgresContainer {
         registry.add("POSTGRES_PORT", postgreSqlContainer::getFirstMappedPort);
         registry.add("POSTGRES_USERNAME", postgreSqlContainer::getUsername);
         registry.add("POSTGRES_PASSWORD", postgreSqlContainer::getPassword);
-
-//        registry.add("spring.r2dbc.username", postgreSqlContainer::getUsername);
-//        registry.add("spring.r2dbc.password", postgreSqlContainer::getPassword);
-//        registry.add("spring.r2dbc.url", () ->
-//                format("r2dbc:postgresql://%s:%d/%s",
-//                        postgreSqlContainer.getHost(),
-//                        postgreSqlContainer.getFirstMappedPort(),
-//                        postgreSqlContainer.getDatabaseName())
-//        );
     }
 
     static PostgreSQLContainer<?> createPostgresContainer() {
