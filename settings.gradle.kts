@@ -4,6 +4,7 @@ include("java-domain")
 include("proto-domain")
 include("usecase")
 include("infrastructure")
+include("e2e")
 
 pluginManagement {
     repositories {
