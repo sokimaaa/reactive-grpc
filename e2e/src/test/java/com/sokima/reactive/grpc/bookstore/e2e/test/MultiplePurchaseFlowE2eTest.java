@@ -56,15 +56,7 @@ class MultiplePurchaseFlowE2eTest extends E2eContainer {
                         "4th Edition",
                         1
                 )
-                .invokeSupplyBookStub()
-                .log()
-                .as(StepVerifier::create)
-                .consumeNextWith(supplyBookResponse -> {
-                    Assertions.assertEquals(2, supplyBookResponse.getQuantity());
-                })
-                .verifyComplete();
-
-        supplyBookClient.setSupplyBookRequest(
+                .setSupplyBookRequest(
                         "Anna Karenina",
                         "Leo Tolstoy",
                         "Classic Edition",
@@ -74,7 +66,10 @@ class MultiplePurchaseFlowE2eTest extends E2eContainer {
                 .log()
                 .as(StepVerifier::create)
                 .consumeNextWith(supplyBookResponse -> {
-                    Assertions.assertEquals(2, supplyBookResponse.getQuantity());
+                    Assertions.assertEquals(1, supplyBookResponse.getQuantity());
+                })
+                .consumeNextWith(supplyBookResponse -> {
+                    Assertions.assertEquals(1, supplyBookResponse.getQuantity());
                 })
                 .verifyComplete();
 
