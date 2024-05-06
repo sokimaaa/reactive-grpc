@@ -24,7 +24,9 @@ Functionality includes:
 - Reactive Grpc
 - R2DBC
 - Postgres
+- Testcontainers
 - Gradle
+- Docker
 
 
 ## Architecture Perspective
@@ -45,7 +47,14 @@ Specifically it represents four modules:
 ## Build and Run
 Run postgres database with [sql script](2-database/init.sql) or
 ```
-docker compose up -d
+docker run -d \
+  --name postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_DB=bookstore \
+  -p 5432:5432 \
+  -v "./2-database/init.sql:/docker-entrypoint-initdb.d/init.sql" \
+  postgres:14.0
 ```
 
 Initial project build
@@ -57,3 +66,10 @@ On the `infrastructure` level present main class `Starter` to launch manually or
 ```
 gradle run
 ```
+
+Or using docker compose
+```
+docker compose up -d
+```
+
+> Docker compose mainly needed for e2e tests to start environment via testcontainers.
