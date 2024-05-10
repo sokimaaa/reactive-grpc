@@ -12,8 +12,9 @@ DROP TABLE IF EXISTS book;
 CREATE TABLE book
 (
     book_id      BIGSERIAL PRIMARY KEY,
+    version      BIGINT            NOT NULL DEFAULT (0),
     isbn         BPCHAR(17) UNIQUE NOT NULL,
-    is_purchased BOOLEAN DEFAULT (FALSE),
+    is_purchased BOOLEAN                    DEFAULT (FALSE),
     checksum     BPCHAR(256) references book_identity (checksum)
 );
 

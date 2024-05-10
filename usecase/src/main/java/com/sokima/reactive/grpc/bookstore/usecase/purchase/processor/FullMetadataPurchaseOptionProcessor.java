@@ -10,6 +10,9 @@ import com.sokima.reactive.grpc.bookstore.usecase.purchase.processor.mapper.Cont
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
+import reactor.util.retry.Retry;
+
+import java.time.Duration;
 
 public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProcessor<FullBookMetadataPurchaseOption> {
 
@@ -33,6 +36,9 @@ public class FullMetadataPurchaseOptionProcessor implements PurchaseOptionProces
         final var checksum = ChecksumGenerator.generateBookChecksum(option.title(), option.author(), option.edition());
         return findBookPort.nextBookByChecksum(checksum)
                 .flatMap(book -> updateBookPort.updateBookIsPurchasedField(book.isbn(), Boolean.TRUE))
+                .retryWhen(
+                        Retry.fixedDelay(3, Duration.ofMillis(100L)).doBeforeRetry(signal -> log.trace("Retrying Full Metadata Purchase Processor due ", signal.failure()))
+                )
                 .filter(UpdateBookPort.Container::isUpdated)
                 .flatMap(bookContainer -> findBookPort.findBookAggregationByChecksum(checksum)
                         .flatMap(bookAggregation -> updateBookPort.updateBookAggregationQuantity(
