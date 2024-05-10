@@ -95,6 +95,7 @@ public class UpdateBookPersistentAdapter implements UpdateBookPort {
     public Mono<Container<BookAggregation>> updateBookAggregationQuantity(final String checksum, final Long quantity) {
         return bookAggregationRepository.findByChecksum(checksum)
                 .map(bookAggregation -> bookAggregationTransformer.enrichQuantity(bookAggregation, quantity))
+                .doOnNext(aggregationEntity -> log.debug("Book Aggregation Entity before save: {}", aggregationEntity))
                 .flatMap(bookAggregationRepository::save)
                 .map(entity -> composeContainer(entity, entity))
                 .map(this::recomposeAggregationContainer)

@@ -72,9 +72,9 @@ class MultipleRepeatingPurchaseFlowE2eTest extends E2eContainer {
                 .verifyComplete();
 
         getBookClient.setFullMetadataRequest(
-                        "Crime and Punishment",
-                        "Fyodor Dostoevsky",
-                        "Vintage Edition"
+                        "Great Expectations",
+                        "Charles Dickens",
+                        "Illustrated Edition"
                 )
                 .invokeGetBookStub()
                 .log()

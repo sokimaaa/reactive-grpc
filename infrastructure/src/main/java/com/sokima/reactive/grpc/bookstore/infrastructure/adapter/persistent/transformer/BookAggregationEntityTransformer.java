@@ -3,7 +3,6 @@ package com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.tra
 import com.sokima.reactive.grpc.bookstore.domain.BookAggregation;
 import com.sokima.reactive.grpc.bookstore.domain.ImmutableBookAggregation;
 import com.sokima.reactive.grpc.bookstore.infrastructure.adapter.persistent.entity.BookAggregationEntity;
-import io.r2dbc.spi.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,6 @@ public class BookAggregationEntityTransformer {
         log.trace("Transforming to book aggregation entity: {}", checksum);
         final var bookAggregationEntity = new BookAggregationEntity();
         bookAggregationEntity.setChecksum(checksum);
-        bookAggregationEntity.setQuantity(0L);
         return bookAggregationEntity;
     }
 
